@@ -1,40 +1,33 @@
+"use client";
+
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
+import { LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SignInModal } from "./SignInModal";
 
-export default async function AuthButton() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+type Props = {
+  user: number | null;
+  setUser: Dispatch<SetStateAction<number | null>>;
+};
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const signOut = async () => {
-    "use server";
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    await supabase.auth.signOut();
-    return redirect("/login");
-  };
+export default async function AuthButton({ user, setUser }: Props) {
+  const signOut = async () => {};
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOut}>
-        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
-          Logout
-        </button>
-      </form>
+      Hey, {user}!
+      <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+        Logout
+      </button>
     </div>
   ) : (
-    <Link
-      href="/login"
-      className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-    >
-      Login
-    </Link>
+    <SignInModal>
+      <Button variant="secondary">
+        <LogIn className="mr-2 h-4 w-4" /> Login
+      </Button>
+    </SignInModal>
   );
 }
