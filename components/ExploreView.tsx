@@ -4,16 +4,16 @@ export default function ExploreView() {
   return (
     <Card className="max-w-sm">
       <Flex justifyContent="between" alignItems="center">
-        <Text>Sales</Text>
+        <Text>GPUs/hour</Text>
         <BadgeDelta
           deltaType="moderateIncrease"
           isIncreasePositive={true}
           size="xs"
         >
-          +12.3%
+          2.4%
         </BadgeDelta>
       </Flex>
-      <Metric>$ 23,456</Metric>
+      <Metric> $2.85</Metric>
     </Card>
   );
 }
