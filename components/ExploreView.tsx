@@ -10,7 +10,7 @@ export default function ExploreView() {
           isIncreasePositive={true}
           size="xs"
         >
-          2.4%
+          2%
         </BadgeDelta>
       </Flex>
       <Metric> $2.85</Metric>
