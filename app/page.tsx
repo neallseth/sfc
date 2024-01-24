@@ -7,7 +7,7 @@ import SignUpUserSteps from "@/components/SignUpUserSteps";
 import { useState } from "react";
 import OrderStatus from "@/components/OrderStatus";
 
-export default async function Index() {
+export default function Index() {
   const [user, setUser] = useState<null | number>(null);
 
   return (

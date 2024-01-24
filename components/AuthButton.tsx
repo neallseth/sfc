@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SignInModal } from "./SignInModal";
@@ -13,8 +13,9 @@ type Props = {
   setUser: Dispatch<SetStateAction<number | null>>;
 };
 
-export default async function AuthButton({ user, setUser }: Props) {
+export default function AuthButton({ user, setUser }: Props) {
   const signOut = async () => {};
+  const [modalOpen, setModalOpen] = useState(false);
 
   return user ? (
     <div className="flex items-center gap-4">
@@ -24,7 +25,7 @@ export default async function AuthButton({ user, setUser }: Props) {
       </button>
     </div>
   ) : (
-    <SignInModal>
+    <SignInModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
       <Button variant="secondary">
         <LogIn className="mr-2 h-4 w-4" /> Login
       </Button>
