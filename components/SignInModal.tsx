@@ -51,12 +51,20 @@ type Props = {
   children: React.ReactNode;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
+  setSignedInUser: Dispatch<SetStateAction<Tables<"users"> | null>>;
 };
 
-export function SignInModal({ children, modalOpen, setModalOpen }: Props) {
+export function SignInModal({
+  children,
+  modalOpen,
+  setModalOpen,
+  setSignedInUser,
+}: Props) {
   const [users, setUsers] = useState<Array<Tables<"users">>>([]);
   const [open, setOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUser, setSelectedUser] = useState<Tables<"users"> | null>(
+    null
+  );
 
   useEffect(() => {
     async function loadUsers() {
@@ -71,6 +79,7 @@ export function SignInModal({ children, modalOpen, setModalOpen }: Props) {
   }, []);
 
   function handleSignIn() {
+    setSignedInUser(selectedUser);
     setModalOpen(false);
   }
 
@@ -84,37 +93,6 @@ export function SignInModal({ children, modalOpen, setModalOpen }: Props) {
             Simulated sign-in flow; manage state of all users.
           </DialogDescription>
         </DialogHeader>
-        {/* <Tabs defaultValue="account">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="account">Existing User</TabsTrigger>
-            <TabsTrigger value="password">New User</TabsTrigger>
-          </TabsList>
-          <TabsContent value="account">
-          </TabsContent>
-          <TabsContent value="password">
-            <Card>
-              <CardHeader>
-                <CardTitle>Password</CardTitle>
-                <CardDescription>
-                  Change your password here. After saving, you'll be logged out.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="current">Current password</Label>
-                  <Input id="current" type="password" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="new">New password</Label>
-                  <Input id="new" type="password" />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button>Save password</Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-        </Tabs> */}
         <div className="flex py-4 justify-center">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -124,15 +102,13 @@ export function SignInModal({ children, modalOpen, setModalOpen }: Props) {
                 aria-expanded={open}
                 className="w-[200px] justify-between"
               >
-                {selectedUser
-                  ? users.find((user) => user.name === selectedUser)?.name
-                  : "Select user..."}
+                {selectedUser ? selectedUser.name : "Select existing user"}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0">
               <Command>
-                <CommandInput placeholder="Search users..." />
+                <CommandInput placeholder="Search users" />
                 <CommandEmpty>User not found</CommandEmpty>
                 <CommandGroup>
                   {users.map((user) => (
@@ -140,9 +116,16 @@ export function SignInModal({ children, modalOpen, setModalOpen }: Props) {
                       key={user.id}
                       value={user.name || ""}
                       onSelect={(currentValue) => {
-                        setSelectedUser(
-                          currentValue === selectedUser ? "" : currentValue
+                        console.log(currentValue);
+                        console.log(users);
+                        const selected = users.find(
+                          (user) =>
+                            user.name?.toLowerCase() ===
+                            currentValue.toLowerCase()
                         );
+                        if (selected) {
+                          setSelectedUser(selected);
+                        }
                         setOpen(false);
                       }}
                     >
@@ -170,7 +153,7 @@ export function SignInModal({ children, modalOpen, setModalOpen }: Props) {
             disabled={!selectedUser}
             type="submit"
           >
-            Sign in{selectedUser ? ` as ${selectedUser}` : null}
+            Sign in{selectedUser ? ` as ${selectedUser.name}` : null}
           </Button>
         </DialogFooter>
       </DialogContent>
