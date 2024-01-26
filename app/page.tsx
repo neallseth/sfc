@@ -4,15 +4,22 @@ import AuthButton from "../components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import ConnectSupabaseSteps from "@/components/ConnectSupabaseSteps";
 import SignUpUserSteps from "@/components/SignUpUserSteps";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OrderStatus from "@/components/OrderStatus";
 import { Tables } from "@/lib/types/database.types";
 import OrdersView from "@/components/OrdersView";
 import ExploreView from "@/components/ExploreView";
-import ProcurementView from "@/components/ProcurementView";
+import ProcurementView from "@/components/procurement/ProcurementView";
 
 export default function Index() {
   const [user, setUser] = useState<Tables<"users"> | null>(null);
+
+  useEffect(() => {
+    const lastUsedUser = localStorage.getItem("recent-user");
+    if (lastUsedUser) {
+      setUser(JSON.parse(lastUsedUser));
+    }
+  }, []);
 
   return (
     <div className="grow w-full flex flex-col gap-6 md:gap-12 items-center">

@@ -72,7 +72,8 @@ export function SignInModal({
       const { data, error } = await supabase.from("users").select();
       if (data) {
         setUsers(data);
-        console.log(data);
+      } else if (error) {
+        console.error(error);
       }
     }
     loadUsers();
@@ -80,6 +81,7 @@ export function SignInModal({
 
   function handleSignIn() {
     setSignedInUser(selectedUser);
+    localStorage.setItem("recent-user", JSON.stringify(selectedUser));
     setModalOpen(false);
   }
 
