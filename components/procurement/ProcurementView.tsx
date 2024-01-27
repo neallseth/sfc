@@ -13,8 +13,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 import ProcurementForm from "@/components/procurement/ProcurementForm";
+import { Tables } from "@/lib/types/database.types";
 
-export default function ProcurementView() {
+type Props = {
+  user: Tables<"users"> | null;
+};
+
+export default function ProcurementView({ user }: Props) {
   return (
     <Card>
       <CardHeader>
@@ -22,11 +27,11 @@ export default function ProcurementView() {
         <CardDescription>Place a bid for the GPUs you need</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        <ProcurementForm />
+        <ProcurementForm user={user} />
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <Button>Save changes</Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 

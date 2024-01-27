@@ -33,7 +33,7 @@ export default function Index() {
       <main className="grow w-full px-6 md:px-12 flex flex-col gap-6 md:gap-12">
         <OrdersView user={user} />
         <ExploreView />
-        <ProcurementView />
+        <ProcurementView user={user} />
       </main>
 
       <footer className="w-full bg-neutral-50 border-t border-t-bg-neutral-200 p-6 flex justify-center text-center text-xs">

@@ -25,13 +25,22 @@ import {
 } from "@/components/ui/popover";
 import TimePicker from "./time-picker";
 import { start } from "repl";
+import { ConfirmBid } from "./ConfirmBid";
+import { Tables } from "@/lib/types/database.types";
+import { Separator } from "@/components/ui/separator";
 
 type timeOption = {
   value: string;
   label: string;
 };
 
-export default function ProcurementForm() {
+type Props = {
+  user: Tables<"users"> | null;
+};
+
+const gpuHourMarketRate = 2.85;
+
+export default function ProcurementForm({ user }: Props) {
   const [gpuCount, setGpuCount] = useState(30);
   const [date, setDate] = useState<DateRange | undefined>({
     from: addDays(new Date(), 10),
@@ -39,6 +48,7 @@ export default function ProcurementForm() {
   });
   const [startTime, setStartTime] = useState<timeOption | null>(null);
   const [endTime, setEndTime] = useState<timeOption | null>(null);
+  const [bidRate, setBidRate] = useState(gpuHourMarketRate);
   const startDateTimeUTC = useMemo(() => {
     if (date?.from && startTime) {
       const newStartDate = new Date(date.from);
@@ -68,6 +78,10 @@ export default function ProcurementForm() {
     }
     return 0;
   }, [startDateTimeUTC, endDateTimeUTC]);
+
+  const bidTotalPrice = useMemo(() => {
+    return Math.ceil(bidRate * hoursCount * gpuCount);
+  }, [bidRate, hoursCount, gpuCount]);
 
   return (
     <>
@@ -127,11 +141,11 @@ export default function ProcurementForm() {
                 setSelectedTime={setStartTime}
               />
             </div>
-            {startDateTimeUTC ? (
+            {/* {startDateTimeUTC ? (
               <p className="text-xs italic">
                 {format(startDateTimeUTC, "LLL dd, yyyy, h:mm aaaa O")}
               </p>
-            ) : null}
+            ) : null} */}
           </div>
         ) : null}{" "}
         {date?.from ? (
@@ -146,6 +160,8 @@ export default function ProcurementForm() {
           </div>
         ) : null}
       </div>
+      <Separator className="my-12" />
+
       <p className="text-lg text-center py-4">
         <span className="font-semibold">{hoursCount}</span> hour
         {hoursCount === 1 ? "" : "s"}
@@ -163,16 +179,53 @@ export default function ProcurementForm() {
         <span className="font-semibold">{gpuCount}</span> GPU
         {gpuCount === 1 ? "" : "s"}
       </p>
-      {Array.from({ length: hoursCount }, (_, index) => (
-        <div className="flex flex-row">
-          {Array.from({ length: gpuCount }, (_, index) => (
-            <span
-              className="flex flex-col m-0 w-2 h-2 border-2 border-rose-500"
-              key={index}
-            ></span>
+      <Separator className="my-12" />
+
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-row overflow-auto">
+          {Array.from({ length: hoursCount }, (_, index) => (
+            <div className="flex flex-col">
+              {Array.from({ length: gpuCount }, (_, index) => (
+                <span
+                  className="w-2 h-2 border-[1px] m-[1px] border-neutral-500"
+                  key={index}
+                ></span>
+              ))}
+            </div>
           ))}
         </div>
-      ))}
+        <div className="flex items-center justify-center">
+          <div>
+            {" "}
+            You're bidding for{" "}
+            <span className="font-bold">{hoursCount * gpuCount}</span> total
+            GPU-hours
+            <div className="flex items-center">
+              {" "}
+              at
+              <Input
+                className="w-24 mx-2"
+                type="number"
+                value={bidRate}
+                onChange={(e) => setBidRate(Number(e.target.value))}
+              />{" "}
+              USD per GPU-hour{" "}
+            </div>
+          </div>
+        </div>
+        <p className="flex items-center justify-center">
+          For a total of {(hoursCount * gpuCount).toLocaleString()} * $
+          {bidRate.toLocaleString()} = ${bidTotalPrice.toLocaleString()}{" "}
+        </p>
+      </div>
+      <ConfirmBid
+        hoursCount={hoursCount}
+        gpuCount={gpuCount}
+        startDateTimeUTC={startDateTimeUTC}
+        endDateTimeUTC={endDateTimeUTC}
+        user={user}
+        bidTotalPrice={bidTotalPrice}
+      />
     </>
   );
 }
