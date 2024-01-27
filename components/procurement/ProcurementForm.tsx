@@ -159,14 +159,15 @@ export default function ProcurementForm({ user }: Props) {
             </div>
           </div>
         ) : null}
+        <p className="text-lg text-center">
+          <span className="font-semibold">{hoursCount}</span> hour
+          {hoursCount === 1 ? "" : "s"}
+        </p>
       </div>
-      <Separator className="my-12" />
 
-      <p className="text-lg text-center py-4">
-        <span className="font-semibold">{hoursCount}</span> hour
-        {hoursCount === 1 ? "" : "s"}
-      </p>
-      <div className="space-y-1">
+      <Separator className="my-8" />
+
+      <div className="flex flex-col gap-6">
         <Label htmlFor="gpus">How many GPUs do you need per hour?</Label>
         <Slider
           onValueChange={(val) => setGpuCount(val[0])}
@@ -174,12 +175,12 @@ export default function ProcurementForm({ user }: Props) {
           max={100}
           step={1}
         />
+        <p className="text-lg text-center">
+          <span className="font-semibold">{gpuCount}</span> GPU
+          {gpuCount === 1 ? "" : "s"}
+        </p>
       </div>
-      <p className="text-lg text-center py-4">
-        <span className="font-semibold">{gpuCount}</span> GPU
-        {gpuCount === 1 ? "" : "s"}
-      </p>
-      <Separator className="my-12" />
+      <Separator className="my-8" />
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-row overflow-auto">

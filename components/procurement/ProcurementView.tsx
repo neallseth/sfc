@@ -26,7 +26,7 @@ export default function ProcurementView({ user }: Props) {
         <CardTitle>Get Compute</CardTitle>
         <CardDescription>Place a bid for the GPUs you need</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent>
         <ProcurementForm user={user} />
       </CardContent>
       {/* <CardFooter>
