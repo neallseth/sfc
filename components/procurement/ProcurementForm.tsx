@@ -15,6 +15,7 @@ import { useMemo, useState } from "react";
 import { addDays, differenceInHours, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
+import { UTCDate } from "@date-fns/utc";
 
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -29,7 +30,7 @@ import { ConfirmBid } from "./ConfirmBid";
 import { Tables } from "@/lib/types/database.types";
 import { Separator } from "@/components/ui/separator";
 
-type timeOption = {
+type TimeOption = {
   value: string;
   label: string;
 };
@@ -40,19 +41,25 @@ type Props = {
 
 const gpuHourMarketRate = 2.85;
 
+function parseDateAsUTC(date: Date) {
+  const dateString = format(date, "yyyy-MM-dd");
+  return new Date(dateString + "T00:00:00.000Z");
+}
+
 export default function ProcurementForm({ user }: Props) {
   const [gpuCount, setGpuCount] = useState(30);
   const [date, setDate] = useState<DateRange | undefined>({
     from: addDays(new Date(), 10),
     to: addDays(new Date(), 15),
   });
-  const [startTime, setStartTime] = useState<timeOption | null>(null);
-  const [endTime, setEndTime] = useState<timeOption | null>(null);
+  const [startTime, setStartTime] = useState<TimeOption | null>(null);
+  const [endTime, setEndTime] = useState<TimeOption | null>(null);
   const [bidRate, setBidRate] = useState(gpuHourMarketRate);
   const startDateTimeUTC = useMemo(() => {
     if (date?.from && startTime) {
-      const newStartDate = new Date(date.from);
+      const newStartDate = parseDateAsUTC(date.from);
       newStartDate.setUTCHours(Number(startTime.value), 0, 0, 0);
+      console.log(newStartDate.toUTCString());
       return newStartDate;
     }
   }, [date?.from, startTime]);
@@ -62,11 +69,11 @@ export default function ProcurementForm({ user }: Props) {
       return;
     }
     if (date?.to) {
-      const newEndDate = new Date(date.to);
+      const newEndDate = parseDateAsUTC(date.to);
       newEndDate.setUTCHours(Number(endTime.value), 0, 0, 0);
       return newEndDate;
     } else if (date?.from) {
-      const newEndDate = new Date(date.from);
+      const newEndDate = parseDateAsUTC(date.from);
       newEndDate.setUTCHours(Number(endTime.value), 0, 0, 0);
       return newEndDate;
     }
@@ -185,7 +192,7 @@ export default function ProcurementForm({ user }: Props) {
       <div className="flex flex-col gap-6">
         <div className="flex flex-row overflow-auto">
           {Array.from({ length: hoursCount }, (_, index) => (
-            <div className="flex flex-col">
+            <div key={index} className="flex flex-col">
               {Array.from({ length: gpuCount }, (_, index) => (
                 <span
                   className="w-2 h-2 border-[1px] m-[1px] border-neutral-500"
@@ -206,9 +213,17 @@ export default function ProcurementForm({ user }: Props) {
               at
               <Input
                 className="w-24 mx-2"
+                step="0.01"
                 type="number"
                 value={bidRate}
-                onChange={(e) => setBidRate(Number(e.target.value))}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  if (value.includes(".") && value.split(".")[1].length > 2) {
+                    // value = parseFloat(value).toFixed(2);
+                    return;
+                  }
+                  setBidRate(Number(value));
+                }}
               />{" "}
               USD per GPU-hour{" "}
             </div>
@@ -216,17 +231,23 @@ export default function ProcurementForm({ user }: Props) {
         </div>
         <p className="flex items-center justify-center">
           For a total of {(hoursCount * gpuCount).toLocaleString()} * $
-          {bidRate.toLocaleString()} = ${bidTotalPrice.toLocaleString()}{" "}
+          {bidRate.toLocaleString()} ={" "}
+          <span className="font-semibold">
+            ${bidTotalPrice.toLocaleString()}
+          </span>{" "}
         </p>
+        <div className="flex justify-center">
+          <ConfirmBid
+            hoursCount={hoursCount}
+            gpuCount={gpuCount}
+            startDateTimeUTC={startDateTimeUTC}
+            endDateTimeUTC={endDateTimeUTC}
+            user={user}
+            bidTotalPrice={bidTotalPrice}
+            pricePerGPU={bidRate}
+          />
+        </div>
       </div>
-      <ConfirmBid
-        hoursCount={hoursCount}
-        gpuCount={gpuCount}
-        startDateTimeUTC={startDateTimeUTC}
-        endDateTimeUTC={endDateTimeUTC}
-        user={user}
-        bidTotalPrice={bidTotalPrice}
-      />
     </>
   );
 }

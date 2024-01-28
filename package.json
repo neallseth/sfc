@@ -7,6 +7,7 @@
     "gen-types": "npx supabase gen types typescript --project-id pmflgiamlcqtxxnskdjn > lib/types/database.types.ts"
   },
   "dependencies": {
+    "@date-fns/utc": "^1.1.1",
     "@headlessui/react": "^1.7.18",
     "@headlessui/tailwindcss": "^0.2.0",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -45,6 +46,7 @@
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
-    "encoding": "^0.1.13"
+    "encoding": "^0.1.13",
+    "supabase": "^1.136.3"
   }
 }

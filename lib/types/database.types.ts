@@ -9,18 +9,98 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      bids: {
+      bid_gpu_hours: {
         Row: {
+          bid_id: string
           created_at: string
+          gpu_id: string
+          hour_start_time: string
           id: number
         }
         Insert: {
+          bid_id: string
           created_at?: string
+          gpu_id: string
+          hour_start_time: string
           id?: number
         }
         Update: {
+          bid_id?: string
           created_at?: string
+          gpu_id?: string
+          hour_start_time?: string
           id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bid_gpu_hours_bid_id_fkey"
+            columns: ["bid_id"]
+            isOneToOne: false
+            referencedRelation: "bids"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bid_gpu_hours_gpu_id_fkey"
+            columns: ["gpu_id"]
+            isOneToOne: false
+            referencedRelation: "gpus"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      bids: {
+        Row: {
+          bid_end_time: string | null
+          bid_start_time: string | null
+          created_at: string
+          gpus_per_hour: number
+          id: string
+          price_per_gpu_hour: number
+          user_id: number
+        }
+        Insert: {
+          bid_end_time?: string | null
+          bid_start_time?: string | null
+          created_at?: string
+          gpus_per_hour: number
+          id?: string
+          price_per_gpu_hour: number
+          user_id: number
+        }
+        Update: {
+          bid_end_time?: string | null
+          bid_start_time?: string | null
+          created_at?: string
+          gpus_per_hour?: number
+          id?: string
+          price_per_gpu_hour?: number
+          user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bids_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      gpus: {
+        Row: {
+          cluster: string | null
+          created_at: string
+          id: string
+        }
+        Insert: {
+          cluster?: string | null
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          cluster?: string | null
+          created_at?: string
+          id?: string
         }
         Relationships: []
       }
