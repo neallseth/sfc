@@ -23,7 +23,7 @@ export default function OrdersView({ user }: Props) {
   }
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-row justify-between items-center">
+      <CardHeader className="flex flex-row justify-between items-center space-y-0">
         <div>
           <CardTitle>{user.name?.split(" ")[0]}'s Orders</CardTitle>
           <CardDescription>Active bids and reservations</CardDescription>

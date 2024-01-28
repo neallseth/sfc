@@ -46,11 +46,6 @@ type BidFormProps = {
   pricePerGPU: number;
 };
 
-const formatUTCDate = (date) => {
-  const utcDate = parseISO(date.toISOString());
-  return format(utcDate, "LLL dd, yyyy, HH:mm 'UTC'");
-};
-
 export function ConfirmBid({
   user,
   hoursCount,

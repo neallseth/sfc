@@ -1,7 +1,6 @@
 "use client";
 
 import AuthButton from "../components/AuthButton";
-import { createClient } from "@/utils/supabase/server";
 import ConnectSupabaseSteps from "@/components/ConnectSupabaseSteps";
 import SignUpUserSteps from "@/components/SignUpUserSteps";
 import { useEffect, useState } from "react";
@@ -10,9 +9,11 @@ import { Tables } from "@/lib/types/database.types";
 import OrdersView from "@/components/OrdersView";
 import ExploreView from "@/components/ExploreView";
 import ProcurementView from "@/components/procurement/ProcurementView";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Index() {
   const [user, setUser] = useState<Tables<"users"> | null>(null);
+  const [userBids, setUserBids] = useState<Array<Tables<"bids">> | null>(null);
 
   useEffect(() => {
     const lastUsedUser = localStorage.getItem("recent-user");
@@ -20,6 +21,27 @@ export default function Index() {
       setUser(JSON.parse(lastUsedUser));
     }
   }, []);
+
+  useEffect(() => {
+    async function pullUserOrders() {
+      if (!user) {
+        return;
+      }
+
+      const supabase = createClient();
+      const { data: bids, error } = await supabase
+        .from("bids")
+        .select()
+        .eq("user_id", user.id);
+
+      if (!error) {
+        setUserBids(bids);
+        console.log(bids);
+      }
+    }
+
+    pullUserOrders();
+  }, [user]);
 
   return (
     <div className="grow w-full flex flex-col gap-6 md:gap-12 items-center">
