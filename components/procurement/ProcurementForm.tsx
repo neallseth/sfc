@@ -37,6 +37,7 @@ type TimeOption = {
 
 type Props = {
   user: Tables<"users"> | null;
+  pullUserOrders: () => Promise<void>;
 };
 
 const gpuHourMarketRate = 2.85;
@@ -46,7 +47,7 @@ function parseDateAsUTC(date: Date) {
   return new Date(dateString + "T00:00:00.000Z");
 }
 
-export default function ProcurementForm({ user }: Props) {
+export default function ProcurementForm({ user, pullUserOrders }: Props) {
   const [gpuCount, setGpuCount] = useState(30);
   const [date, setDate] = useState<DateRange | undefined>({
     from: addDays(new Date(), 10),
@@ -87,7 +88,7 @@ export default function ProcurementForm({ user }: Props) {
   }, [startDateTimeUTC, endDateTimeUTC]);
 
   const bidTotalPrice = useMemo(() => {
-    return Math.ceil(bidRate * hoursCount * gpuCount);
+    return Math.ceil(bidRate * hoursCount * gpuCount * 100) / 100;
   }, [bidRate, hoursCount, gpuCount]);
 
   return (
@@ -219,7 +220,6 @@ export default function ProcurementForm({ user }: Props) {
                 onChange={(e) => {
                   let value = e.target.value;
                   if (value.includes(".") && value.split(".")[1].length > 2) {
-                    // value = parseFloat(value).toFixed(2);
                     return;
                   }
                   setBidRate(Number(value));
@@ -245,6 +245,7 @@ export default function ProcurementForm({ user }: Props) {
             user={user}
             bidTotalPrice={bidTotalPrice}
             pricePerGPU={bidRate}
+            pullUserOrders={pullUserOrders}
           />
         </div>
       </div>

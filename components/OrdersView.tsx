@@ -1,4 +1,4 @@
-import OrderStatus from "@/components/OrderStatus";
+import OrderCard from "@/components/OrderCard";
 import {
   Card,
   CardContent,
@@ -13,11 +13,10 @@ import { Tables } from "@/lib/types/database.types";
 
 type Props = {
   user: Tables<"users"> | null;
+  userBids: Array<Tables<"bids">> | null;
 };
 
-const orders = true;
-
-export default function OrdersView({ user }: Props) {
+export default function OrdersView({ user, userBids }: Props) {
   if (!user) {
     return;
   }
@@ -33,8 +32,12 @@ export default function OrdersView({ user }: Props) {
         </Button>
       </CardHeader>
       <CardContent>
-        {orders ? (
-          <OrderStatus />
+        {userBids?.length ? (
+          <div className="flex flex-col gap-6">
+            {userBids.map((bid) => {
+              return <OrderCard key={bid.id} type={"bid"} order={bid} />;
+            })}
+          </div>
         ) : (
           <div className="flex items-center justify-center p-4">
             <CloudSun className="mr-2 h-4 w-4" />
@@ -42,7 +45,6 @@ export default function OrdersView({ user }: Props) {
           </div>
         )}
       </CardContent>
-      {/* <CardFooter className="flex justify-between"></CardFooter> */}
     </Card>
   );
 }

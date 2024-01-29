@@ -50,30 +50,39 @@ export interface Database {
       }
       bids: {
         Row: {
-          bid_end_time: string | null
-          bid_start_time: string | null
+          bid_end_time: string
+          bid_start_time: string
           created_at: string
           gpus_per_hour: number
           id: string
           price_per_gpu_hour: number
+          total_bid_price: number
+          total_gpu_hours: number
+          total_hours: number
           user_id: number
         }
         Insert: {
-          bid_end_time?: string | null
-          bid_start_time?: string | null
+          bid_end_time: string
+          bid_start_time: string
           created_at?: string
           gpus_per_hour: number
           id?: string
           price_per_gpu_hour: number
+          total_bid_price: number
+          total_gpu_hours: number
+          total_hours: number
           user_id: number
         }
         Update: {
-          bid_end_time?: string | null
-          bid_start_time?: string | null
+          bid_end_time?: string
+          bid_start_time?: string
           created_at?: string
           gpus_per_hour?: number
           id?: string
           price_per_gpu_hour?: number
+          total_bid_price?: number
+          total_gpu_hours?: number
+          total_hours?: number
           user_id?: number
         }
         Relationships: [

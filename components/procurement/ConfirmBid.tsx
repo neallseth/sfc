@@ -24,6 +24,8 @@ import { Label } from "@/components/ui/label";
 import { FormEvent, useState } from "react";
 import { Tables } from "@/lib/types/database.types";
 import { format, parseISO } from "date-fns";
+import { Separator } from "@/components/ui/separator";
+
 // import { UTCDate } from "@date-fns/utc";
 
 type ConfirmBidProps = {
@@ -34,6 +36,7 @@ type ConfirmBidProps = {
   endDateTimeUTC: Date | undefined;
   bidTotalPrice: number;
   pricePerGPU: number;
+  pullUserOrders: () => Promise<void>;
 };
 
 type BidFormProps = {
@@ -44,6 +47,8 @@ type BidFormProps = {
   endDateTimeUTC: Date;
   bidTotalPrice: number;
   pricePerGPU: number;
+  pullUserOrders: () => Promise<void>;
+  closeModal: () => void;
 };
 
 export function ConfirmBid({
@@ -54,6 +59,7 @@ export function ConfirmBid({
   endDateTimeUTC,
   bidTotalPrice,
   pricePerGPU,
+  pullUserOrders,
 }: ConfirmBidProps) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -88,6 +94,8 @@ export function ConfirmBid({
             endDateTimeUTC={endDateTimeUTC}
             bidTotalPrice={bidTotalPrice}
             pricePerGPU={pricePerGPU}
+            pullUserOrders={pullUserOrders}
+            closeModal={() => setOpen(false)}
           />
         </DialogContent>
       </Dialog>
@@ -112,6 +120,8 @@ export function ConfirmBid({
           endDateTimeUTC={endDateTimeUTC}
           bidTotalPrice={bidTotalPrice}
           pricePerGPU={pricePerGPU}
+          pullUserOrders={pullUserOrders}
+          closeModal={() => setOpen(false)}
         />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -131,15 +141,20 @@ function BidForm({
   endDateTimeUTC,
   bidTotalPrice,
   pricePerGPU,
+  pullUserOrders,
+  closeModal,
 }: BidFormProps) {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = {
       user_id: user.id,
-      gpus_per_hour: gpuCount,
       bid_start_time: startDateTimeUTC,
       bid_end_time: endDateTimeUTC,
+      total_hours: hoursCount,
+      gpus_per_hour: gpuCount,
+      total_gpu_hours: hoursCount * gpuCount,
       price_per_gpu_hour: pricePerGPU,
+      total_bid_price: bidTotalPrice,
     };
     try {
       const response = await fetch("/api/place-bid", {
@@ -153,7 +168,8 @@ function BidForm({
         const err = await response.json();
         console.error("API error: ", err);
       } else {
-        console.log("success");
+        await pullUserOrders();
+        closeModal();
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -195,7 +211,7 @@ function BidForm({
           </p>
         </div>
       ) : null}
-
+      <Separator />
       <p className="text-lg">
         Requesting a total of{" "}
         <span className="font-bold">{hoursCount * gpuCount}</span> GPU hours for{" "}
