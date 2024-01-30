@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
 import { formatAsUSD } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = {
   type: "bid" | "reservation";
@@ -31,8 +31,40 @@ type Props = {
   pullUserOrders: () => Promise<void>;
 };
 export default function OrderCard({ type, order, pullUserOrders }: Props) {
-  const [bidResults, setBidResults] = useState();
-  async function pullBidResults() {}
+  const [bidResults, setBidResults] = useState<Array<
+    Tables<"reserved_gpu_hours">
+  > | null>(null);
+
+  const countsByTime = useMemo(() => {
+    const countsObj: { [key: string]: number } = {};
+    bidResults?.forEach((res) => {
+      const time = res.hour_start_time;
+      countsObj[time] = countsObj[time] ? countsObj[time] + 1 : 1;
+    });
+    const counts = [];
+    for (const [date, count] of Object.entries(countsObj)) {
+      counts.push({ date, count });
+    }
+    return counts;
+  }, [bidResults]);
+
+  useEffect(() => {
+    pullBidResults();
+  }, []);
+
+  async function pullBidResults() {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("reserved_gpu_hours")
+      .select()
+      .eq("bid_id", order.id);
+    if (error) {
+      console.error(error);
+    } else {
+      setBidResults(data);
+      console.log(data);
+    }
+  }
 
   async function handleOrderCancel(orderID: string) {
     const supabase = createClient();
@@ -76,6 +108,17 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
               <p className="text-xs">
                 {format(new UTCDate(order.bid_end_time), "HH:mm") + " UTC"}
               </p>
+            </div>
+            <div className="flex flex-col">
+              {countsByTime
+                .sort((a, b) => (a.date > b.date ? 1 : -1))
+                .map((bidResult) => {
+                  return (
+                    <p key={bidResult.date}>
+                      {bidResult.date}: {bidResult.count}/{order.gpus_per_hour}
+                    </p>
+                  );
+                })}
             </div>
           </div>
           <DropdownMenu>

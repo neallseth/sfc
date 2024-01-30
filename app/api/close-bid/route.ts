@@ -49,8 +49,7 @@ export async function POST(request: NextRequest) {
       .select()
       .lte("bid_start_time", hour_start_time)
       .gt("bid_end_time", hour_start_time)
-      .order("price_per_gpu_hour", { ascending: false })
-      .limit(availableGPUIDs.size);
+      .order("price_per_gpu_hour", { ascending: false });
 
     if (retrieveBidsError) {
       return new Response(JSON.stringify({ retrieveBidsError }), {
@@ -63,11 +62,17 @@ export async function POST(request: NextRequest) {
       const newReservations = [];
       let capacityExhausted = false;
       for (const bid of bids) {
+        console.log(bid);
         if (capacityExhausted) {
           break;
         }
-        for (let i = 0; i < bid.gpus_per_hour; i++) {
+        const presentAllocationForBid = reservations.filter(
+          (r) => r.bid_id === bid.id
+        ).length;
+
+        for (let i = 0; i < bid.gpus_per_hour - presentAllocationForBid; i++) {
           if (!availableGPUIDs.size) {
+            console.log("capacity exhausted");
             capacityExhausted = true;
             break;
           } else {
