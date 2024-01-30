@@ -14,9 +14,10 @@ import { Tables } from "@/lib/types/database.types";
 type Props = {
   user: Tables<"users"> | null;
   userBids: Array<Tables<"bids">> | null;
+  pullUserOrders: () => Promise<void>;
 };
 
-export default function OrdersView({ user, userBids }: Props) {
+export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
   if (!user) {
     return;
   }
@@ -35,7 +36,14 @@ export default function OrdersView({ user, userBids }: Props) {
         {userBids?.length ? (
           <div className="flex flex-col gap-6">
             {userBids.map((bid) => {
-              return <OrderCard key={bid.id} type={"bid"} order={bid} />;
+              return (
+                <OrderCard
+                  key={bid.id}
+                  type={"bid"}
+                  order={bid}
+                  pullUserOrders={pullUserOrders}
+                />
+              );
             })}
           </div>
         ) : (

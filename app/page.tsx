@@ -1,8 +1,6 @@
 "use client";
 
 import AuthButton from "../components/AuthButton";
-import ConnectSupabaseSteps from "@/components/ConnectSupabaseSteps";
-import SignUpUserSteps from "@/components/SignUpUserSteps";
 import { useEffect, useState } from "react";
 import OrderStatus from "@/components/OrderCard";
 import { Tables } from "@/lib/types/database.types";
@@ -52,7 +50,11 @@ export default function Index() {
       </nav>
 
       <main className="grow w-full max-w-screen-lg px-6 md:px-12 flex flex-col gap-6 md:gap-12">
-        <OrdersView user={user} userBids={userBids} />
+        <OrdersView
+          user={user}
+          userBids={userBids}
+          pullUserOrders={pullUserOrders}
+        />
         <ExploreView />
         <ProcurementView user={user} pullUserOrders={pullUserOrders} />
       </main>

@@ -17,7 +17,7 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { UTCDate } from "@date-fns/utc";
 
-import { cn } from "@/lib/utils";
+import { cn, formatAsUSD } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -60,7 +60,7 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
     if (date?.from && startTime) {
       const newStartDate = parseDateAsUTC(date.from);
       newStartDate.setUTCHours(Number(startTime.value), 0, 0, 0);
-      console.log(newStartDate.toUTCString());
+      console.log(newStartDate);
       return newStartDate;
     }
   }, [date?.from, startTime]);
@@ -149,11 +149,6 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
                 setSelectedTime={setStartTime}
               />
             </div>
-            {/* {startDateTimeUTC ? (
-              <p className="text-xs italic">
-                {format(startDateTimeUTC, "LLL dd, yyyy, h:mm aaaa O")}
-              </p>
-            ) : null} */}
           </div>
         ) : null}{" "}
         {date?.from ? (
@@ -207,8 +202,10 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
           <div>
             {" "}
             You're bidding for{" "}
-            <span className="font-bold">{hoursCount * gpuCount}</span> total
-            GPU-hours
+            <span className="font-bold">
+              {(hoursCount * gpuCount).toLocaleString()}
+            </span>{" "}
+            total GPU-hours
             <div className="flex items-center">
               {" "}
               at
@@ -230,11 +227,9 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
           </div>
         </div>
         <p className="flex items-center justify-center">
-          For a total of {(hoursCount * gpuCount).toLocaleString()} * $
-          {bidRate.toLocaleString()} ={" "}
-          <span className="font-semibold">
-            ${bidTotalPrice.toLocaleString()}
-          </span>{" "}
+          Total: {(hoursCount * gpuCount).toLocaleString()} *
+          {formatAsUSD(bidRate)} ={" "}
+          <span className="font-semibold">{formatAsUSD(bidTotalPrice)}</span>{" "}
         </p>
         <div className="flex justify-center">
           <ConfirmBid

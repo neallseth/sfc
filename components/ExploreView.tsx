@@ -1,3 +1,4 @@
+import { formatAsUSD } from "@/lib/utils";
 import { BadgeDelta, Card, Flex, Metric, Text } from "@tremor/react";
 
 export default function ExploreView() {
@@ -13,7 +14,7 @@ export default function ExploreView() {
           2%
         </BadgeDelta>
       </Flex>
-      <Metric> $2.85</Metric>
+      <Metric>{formatAsUSD(2.85)}</Metric>
     </Card>
   );
 }

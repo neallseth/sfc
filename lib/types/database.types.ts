@@ -9,45 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      bid_gpu_hours: {
-        Row: {
-          bid_id: string
-          created_at: string
-          gpu_id: string
-          hour_start_time: string
-          id: number
-        }
-        Insert: {
-          bid_id: string
-          created_at?: string
-          gpu_id: string
-          hour_start_time: string
-          id?: number
-        }
-        Update: {
-          bid_id?: string
-          created_at?: string
-          gpu_id?: string
-          hour_start_time?: string
-          id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bid_gpu_hours_bid_id_fkey"
-            columns: ["bid_id"]
-            isOneToOne: false
-            referencedRelation: "bids"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "bid_gpu_hours_gpu_id_fkey"
-            columns: ["gpu_id"]
-            isOneToOne: false
-            referencedRelation: "gpus"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       bids: {
         Row: {
           bid_end_time: string
@@ -115,18 +76,81 @@ export interface Database {
       }
       reservations: {
         Row: {
+          bid_id: string | null
           created_at: string
-          id: number
+          id: string
+          user_id: number
         }
         Insert: {
+          bid_id?: string | null
           created_at?: string
-          id?: number
+          id: string
+          user_id: number
         }
         Update: {
+          bid_id?: string | null
           created_at?: string
-          id?: number
+          id?: string
+          user_id?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reservations_bid_id_fkey"
+            columns: ["bid_id"]
+            isOneToOne: false
+            referencedRelation: "bids"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      reserved_gpu_hours: {
+        Row: {
+          bid_id: string
+          created_at: string
+          gpu_id: string
+          hour_start_time: string
+          id: number
+          price_per_gpu_hour: number
+        }
+        Insert: {
+          bid_id: string
+          created_at?: string
+          gpu_id: string
+          hour_start_time: string
+          id?: number
+          price_per_gpu_hour: number
+        }
+        Update: {
+          bid_id?: string
+          created_at?: string
+          gpu_id?: string
+          hour_start_time?: string
+          id?: number
+          price_per_gpu_hour?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reserved_gpu_hours_bid_id_fkey"
+            columns: ["bid_id"]
+            isOneToOne: false
+            referencedRelation: "bids"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reserved_gpu_hours_gpu_id_fkey"
+            columns: ["gpu_id"]
+            isOneToOne: true
+            referencedRelation: "gpus"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       users: {
         Row: {

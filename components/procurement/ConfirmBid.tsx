@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, formatAsUSD } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -72,7 +72,11 @@ export function ConfirmBid({
     !bidTotalPrice ||
     !pricePerGPU
   ) {
-    return <Button disabled>Confirm bid</Button>;
+    return (
+      <Button disabled>
+        {!user ? "Sign in to complete order" : "Confirm bid"}
+      </Button>
+    );
   }
 
   if (isDesktop) {
@@ -156,6 +160,7 @@ function BidForm({
       price_per_gpu_hour: pricePerGPU,
       total_bid_price: bidTotalPrice,
     };
+    console.log(JSON.stringify(data));
     try {
       const response = await fetch("/api/place-bid", {
         method: "POST",
@@ -213,13 +218,11 @@ function BidForm({
       ) : null}
       <Separator />
       <p className="text-lg">
-        Requesting a total of{" "}
-        <span className="font-bold">{hoursCount * gpuCount}</span> GPU hours for{" "}
-        <span className="font-bold">${bidTotalPrice.toLocaleString()}</span>
+        Requesting <span className="font-bold">{hoursCount * gpuCount}</span>{" "}
+        GPU hours for{" "}
+        <span className="font-bold">{formatAsUSD(bidTotalPrice)}</span>
       </p>
-      <Button type="submit">
-        Place bid for ${bidTotalPrice.toLocaleString()}
-      </Button>
+      <Button type="submit">Place bid for {formatAsUSD(bidTotalPrice)}</Button>
     </form>
   );
 }
