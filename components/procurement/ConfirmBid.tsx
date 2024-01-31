@@ -73,6 +73,7 @@ export function ConfirmBid({
     !startDateTimeUTC ||
     !endDateTimeUTC ||
     !bidTotalPrice ||
+    bidTotalPrice <= 0 ||
     !pricePerGPU
   ) {
     return (

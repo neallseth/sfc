@@ -14,6 +14,15 @@ import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 import ProcurementForm from "@/components/procurement/ProcurementForm";
 import { Tables } from "@/lib/types/database.types";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
   user: Tables<"users"> | null;
@@ -23,10 +32,24 @@ type Props = {
 export default function ProcurementView({ user, pullUserOrders }: Props) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Get Compute</CardTitle>
-        <CardDescription>Place a bid for the GPUs you need</CardDescription>
+      <CardHeader className="flex flex-row justify-between items-center space-y-0">
+        <div>
+          <CardTitle>Get Compute</CardTitle>
+          <CardDescription>Place a bid for the GPUs you need</CardDescription>
+        </div>
+        <Select value="ang">
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select cluster" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Clusters</SelectLabel>
+              <SelectItem value="ang">Angel Island</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </CardHeader>
+
       <CardContent>
         <ProcurementForm user={user} pullUserOrders={pullUserOrders} />
       </CardContent>

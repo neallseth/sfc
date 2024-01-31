@@ -99,7 +99,7 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:justify-evenly">
+      <div className="flex flex-col md:flex-row md:justify-evenly pt-2 md:pt-4">
         <div className="flex flex-col gap-6">
           <div className="space-y-2">
             <Label htmlFor="when">On what date(s) do you need GPUs?</Label>
@@ -245,27 +245,29 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
             </div>
           </div>
         </div>
-        <p className="flex items-center justify-center">
-          Total:
-          <span className="font-semibold ml-1">
-            {formatAsUSD(bidTotalPrice)}
-          </span>{" "}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button className="rounded-full" variant="ghost" size="icon">
-                <Info className=" h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              {" "}
-              {(hoursCount * gpuCount).toLocaleString()} *{" "}
-              {formatAsUSD(bidRate)} ={" "}
-              <span className="font-semibold">
-                {formatAsUSD(bidTotalPrice)}
-              </span>{" "}
-            </PopoverContent>
-          </Popover>
-        </p>
+        {bidTotalPrice > 0 ? (
+          <p className="flex items-center justify-center">
+            Total:
+            <span className="font-semibold ml-1">
+              {formatAsUSD(bidTotalPrice)}
+            </span>{" "}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="rounded-full" variant="ghost" size="icon">
+                  <Info className=" h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                {" "}
+                {(hoursCount * gpuCount).toLocaleString()} *{" "}
+                {formatAsUSD(bidRate)} ={" "}
+                <span className="font-semibold">
+                  {formatAsUSD(bidTotalPrice)}
+                </span>{" "}
+              </PopoverContent>
+            </Popover>
+          </p>
+        ) : null}
         <div className="flex justify-center">
           <ConfirmBid
             hoursCount={hoursCount}

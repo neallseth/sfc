@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
 import { Tables } from "@/lib/types/database.types";
+import { BadgeCheck, BadgeAlert } from "lucide-react";
 
 type Props = {
   countsByTime: {
@@ -27,9 +28,17 @@ export default function OrderStatusCard({ countsByTime, order }: Props) {
               <div>
                 {bidResult.times.map((hour) => {
                   return (
-                    <span className="text-xs" key={hour.time}>
-                      {hour.time} UTC: {hour.count}/{order.gpus_per_hour}
-                    </span>
+                    <div key={hour.time} className="flex">
+                      <span className="text-xs">
+                        {" "}
+                        {hour.time} UTC: {hour.count}/{order.gpus_per_hour}{" "}
+                      </span>
+                      {hour.count === order.gpus_per_hour ? (
+                        <BadgeCheck color="green" className="ml-2 h-4 w-4" />
+                      ) : (
+                        <BadgeAlert color="#F1C40F" className="ml-2 h-4 w-4" />
+                      )}{" "}
+                    </div>
                   );
                 })}
               </div>

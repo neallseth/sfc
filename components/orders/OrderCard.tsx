@@ -2,6 +2,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tables } from "@/lib/types/database.types";
 import {
   CircleDashed,
+  Badge,
   Ban,
   MoreHorizontal,
   FilePenLine,
@@ -105,7 +106,8 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
   if (type === "bid") {
     return (
       <Alert>
-        <CircleDashed color="#F1C40F" className="h-4 w-4" />
+        {/* <CircleDashed color="#F1C40F" className="h-4 w-4" /> */}
+        <Badge className="h-4 w-4" />
         <AlertTitle className="pr-4">
           Bid: {formatAsUSD(order.total_bid_price)} for{" "}
           {order.total_gpu_hours.toLocaleString()} GPU-hours

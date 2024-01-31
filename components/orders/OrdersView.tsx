@@ -28,7 +28,7 @@ export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
           <CardTitle>{user.name?.split(" ")[0]}'s Orders</CardTitle>
           <CardDescription>Active bids and reservations</CardDescription>
         </div>
-        <Button className="m-0" variant={"outline"}>
+        <Button disabled className="m-0" variant={"outline"}>
           Order history
         </Button>
       </CardHeader>
