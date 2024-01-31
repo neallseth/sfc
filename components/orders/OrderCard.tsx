@@ -24,7 +24,8 @@ import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
 import { formatAsUSD } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
-import OrderStatusCard from "./OrderStatusCard";
+import OrderStatusCard from "@/components/orders/OrderStatusCard";
+import { toast } from "sonner";
 
 type Props = {
   type: "bid" | "reservation";
@@ -84,20 +85,28 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
   }
 
   async function handleOrderCancel(orderID: string) {
-    const supabase = createClient();
-    const { error } = await supabase.from("bids").delete().eq("id", orderID);
-    if (error) {
-      console.error(error);
-    } else {
+    async function deleteAndRefresh() {
+      const supabase = createClient();
+      const { error } = await supabase.from("bids").delete().eq("id", orderID);
+      if (error) {
+        throw error;
+      }
       await pullUserOrders();
     }
+    toast.promise(deleteAndRefresh(), {
+      loading: "Cancelling bid...",
+      success: () => {
+        return `Cancelled bid for ${order.total_gpu_hours} GPU-hours`;
+      },
+      error: "Failed to cancel bid",
+    });
   }
 
   if (type === "bid") {
     return (
       <Alert>
         <CircleDashed color="#F1C40F" className="h-4 w-4" />
-        <AlertTitle>
+        <AlertTitle className="pr-4">
           Bid: {formatAsUSD(order.total_bid_price)} for{" "}
           {order.total_gpu_hours.toLocaleString()} GPU-hours
         </AlertTitle>

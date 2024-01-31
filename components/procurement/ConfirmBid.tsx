@@ -27,6 +27,7 @@ import { format, parseISO } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { UTCDate } from "@date-fns/utc";
 
 // import { UTCDate } from "@date-fns/utc";
 
@@ -208,7 +209,11 @@ function BidForm({
           <p>
             Starting{" "}
             {/* <span className="font-bold">{formatUTCDate(startDateTimeUTC)}</span> */}
-            <span className="font-bold">{startDateTimeUTC.toUTCString()}</span>
+            <span className="font-bold">
+              {" "}
+              {format(new UTCDate(startDateTimeUTC), "MMM d, yyyy, HH:mm") +
+                " UTC"}
+            </span>
             {/* <span className="font-bold">
               {format(startDateTimeUTC, "yyyy-MM-dd'T'HH:mm:ss'Z'")}
             </span> */}
@@ -225,7 +230,11 @@ function BidForm({
             {/* <span className="font-bold">
               {format(endDateTimeUTC, "LLL dd, yyyy, HH:mm 'UTC'")}
             </span> */}
-            <span className="font-bold">{endDateTimeUTC.toUTCString()}</span>
+            <span className="font-bold">
+              {" "}
+              {format(new UTCDate(endDateTimeUTC), "MMM d, yyyy, HH:mm") +
+                " UTC"}
+            </span>
           </p>
           <p className="text-xs italic">
             {format(endDateTimeUTC, "LLL dd, yyyy, h:mm aaaa O")}
@@ -233,9 +242,9 @@ function BidForm({
         </div>
       ) : null}
       <Separator />
-      <p className="text-lg">
-        Requesting <span className="font-bold">{hoursCount * gpuCount}</span>{" "}
-        GPU hours for{" "}
+      <p className="">
+        Total: <span className="font-bold">{hoursCount * gpuCount}</span> GPU
+        hours for{" "}
         <span className="font-bold">{formatAsUSD(bidTotalPrice)}</span>
       </p>
       {submitted ? (

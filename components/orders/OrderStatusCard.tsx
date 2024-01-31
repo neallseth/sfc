@@ -22,7 +22,7 @@ export default function OrderStatusCard({ countsByTime, order }: Props) {
           return (
             <div key={bidResult.date}>
               <span className="text-xs font-semibold">
-                {format(new UTCDate(bidResult.date), "MMMM d, yyyy")}
+                {format(new UTCDate(bidResult.date), "MMM d, yyyy")}
               </span>
               <div>
                 {bidResult.times.map((hour) => {

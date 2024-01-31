@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { useMemo, useState } from "react";
 import { addDays, differenceInHours, format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Info } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { UTCDate } from "@date-fns/utc";
 
@@ -29,6 +29,12 @@ import { start } from "repl";
 import { ConfirmBid } from "./ConfirmBid";
 import { Tables } from "@/lib/types/database.types";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type TimeOption = {
   value: string;
@@ -240,9 +246,25 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
           </div>
         </div>
         <p className="flex items-center justify-center">
-          Total: {(hoursCount * gpuCount).toLocaleString()} *
-          {formatAsUSD(bidRate)} ={" "}
-          <span className="font-semibold">{formatAsUSD(bidTotalPrice)}</span>{" "}
+          Total:
+          <span className="font-semibold ml-1">
+            {formatAsUSD(bidTotalPrice)}
+          </span>{" "}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="rounded-full" variant="ghost" size="icon">
+                <Info className=" h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              {" "}
+              {(hoursCount * gpuCount).toLocaleString()} *{" "}
+              {formatAsUSD(bidRate)} ={" "}
+              <span className="font-semibold">
+                {formatAsUSD(bidTotalPrice)}
+              </span>{" "}
+            </PopoverContent>
+          </Popover>
         </p>
         <div className="flex justify-center">
           <ConfirmBid
