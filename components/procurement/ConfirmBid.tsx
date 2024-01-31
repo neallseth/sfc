@@ -25,6 +25,8 @@ import { FormEvent, useState } from "react";
 import { Tables } from "@/lib/types/database.types";
 import { format, parseISO } from "date-fns";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 // import { UTCDate } from "@date-fns/utc";
 
@@ -148,8 +150,11 @@ function BidForm({
   pullUserOrders,
   closeModal,
 }: BidFormProps) {
+  const [submitted, setSubmitted] = useState(false);
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setSubmitted(true);
     const data = {
       user_id: user.id,
       bid_start_time: startDateTimeUTC,
@@ -160,7 +165,6 @@ function BidForm({
       price_per_gpu_hour: pricePerGPU,
       total_bid_price: bidTotalPrice,
     };
-    console.log(JSON.stringify(data));
     try {
       const response = await fetch("/api/place-bid", {
         method: "POST",
@@ -169,12 +173,24 @@ function BidForm({
         },
         body: JSON.stringify(data),
       });
+      closeModal();
       if (!response.ok) {
         const err = await response.json();
         console.error("API error: ", err);
+        toast.error("Failed to submit bid");
       } else {
         await pullUserOrders();
-        closeModal();
+        toast.success("Bid submitted", {
+          description: `${hoursCount * gpuCount} GPU hours`,
+        });
+
+        // toast.promise(pullUserOrders(), {
+        //   loading: "Submitting bid...",
+        //   success: () => {
+        //     return `Bid submitted: ${hoursCount * gpuCount} GPU hours`;
+        //   },
+        //   error: "Failed to submit bid",
+        // });
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -222,7 +238,16 @@ function BidForm({
         GPU hours for{" "}
         <span className="font-bold">{formatAsUSD(bidTotalPrice)}</span>
       </p>
-      <Button type="submit">Place bid for {formatAsUSD(bidTotalPrice)}</Button>
+      {submitted ? (
+        <Button disabled>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Submitting bid...
+        </Button>
+      ) : (
+        <Button type="submit">
+          Place bid for {formatAsUSD(bidTotalPrice)}
+        </Button>
+      )}
     </form>
   );
 }

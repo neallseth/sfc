@@ -24,6 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
 import { formatAsUSD } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
+import OrderStatusCard from "./OrderStatusCard";
 
 type Props = {
   type: "bid" | "reservation";
@@ -36,15 +37,31 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
   > | null>(null);
 
   const countsByTime = useMemo(() => {
-    const countsObj: { [key: string]: number } = {};
+    const groupedByDateAndTime: { [date: string]: { [time: string]: number } } =
+      {};
+
     bidResults?.forEach((res) => {
-      const time = res.hour_start_time;
-      countsObj[time] = countsObj[time] ? countsObj[time] + 1 : 1;
+      const dateTime = new Date(res.hour_start_time);
+      const date = dateTime.toISOString().split("T")[0]; // This is already in UTC
+      const time = dateTime.toISOString().split("T")[1].substring(0, 5); // This is also in UTC
+
+      if (!groupedByDateAndTime[date]) {
+        groupedByDateAndTime[date] = {};
+      }
+      if (!groupedByDateAndTime[date][time]) {
+        groupedByDateAndTime[date][time] = 0;
+      }
+      groupedByDateAndTime[date][time]++;
     });
-    const counts = [];
-    for (const [date, count] of Object.entries(countsObj)) {
-      counts.push({ date, count });
-    }
+
+    const counts = Object.entries(groupedByDateAndTime).map(([date, times]) => {
+      const timesArray = Object.entries(times).map(([time, count]) => ({
+        time,
+        count,
+      }));
+      return { date, times: timesArray };
+    });
+    console.log(counts);
     return counts;
   }, [bidResults]);
 
@@ -89,7 +106,6 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
             {order.gpus_per_hour} GPUs for {order.total_hours} hours @ $
             {order.price_per_gpu_hour}/GPU/hour
           </p>
-          {/* <Separator /> */}
 
           <div className="flex items-center justify-between">
             <div>
@@ -109,18 +125,8 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
                 {format(new UTCDate(order.bid_end_time), "HH:mm") + " UTC"}
               </p>
             </div>
-            <div className="flex flex-col">
-              {countsByTime
-                .sort((a, b) => (a.date > b.date ? 1 : -1))
-                .map((bidResult) => {
-                  return (
-                    <p key={bidResult.date}>
-                      {bidResult.date}: {bidResult.count}/{order.gpus_per_hour}
-                    </p>
-                  );
-                })}
-            </div>
           </div>
+          <OrderStatusCard countsByTime={countsByTime} order={order} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

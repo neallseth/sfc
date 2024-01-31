@@ -1,4 +1,4 @@
-import OrderCard from "@/components/OrderCard";
+import OrderCard from "@/components/orders/OrderCard";
 import {
   Card,
   CardContent,
@@ -35,16 +35,18 @@ export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
       <CardContent>
         {userBids?.length ? (
           <div className="flex flex-col gap-6">
-            {userBids.map((bid) => {
-              return (
-                <OrderCard
-                  key={bid.id}
-                  type={"bid"}
-                  order={bid}
-                  pullUserOrders={pullUserOrders}
-                />
-              );
-            })}
+            {userBids
+              .sort((a, b) => (a.created_at > b.created_at ? -1 : 1))
+              .map((bid) => {
+                return (
+                  <OrderCard
+                    key={bid.id}
+                    type={"bid"}
+                    order={bid}
+                    pullUserOrders={pullUserOrders}
+                  />
+                );
+              })}
           </div>
         ) : (
           <div className="flex items-center justify-center p-4">
