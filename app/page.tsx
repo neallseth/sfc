@@ -60,7 +60,7 @@ export default function Index() {
       </main>
 
       <footer className="w-full bg-neutral-50 border-t border-t-bg-neutral-200 p-6 flex justify-center text-center text-xs">
-        <p>Made, of course, in San Francisco </p>
+        <p>Made, of course, in San Francisco &#10084;&#65039;</p>
       </footer>
     </div>
   );

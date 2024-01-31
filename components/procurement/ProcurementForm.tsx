@@ -93,96 +93,109 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
 
   return (
     <>
-      <div className="flex flex-col gap-6">
-        <div className="space-y-1">
-          <Label htmlFor="when">On what date(s) do you need GPUs?</Label>
-          <div className={cn("grid gap-2")}>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  id="date"
-                  variant={"outline"}
-                  className={cn(
-                    "w-[300px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date?.from ? (
-                    date.to ? (
-                      <>
-                        {format(date.from, "LLL dd, y")} -{" "}
-                        {format(date.to, "LLL dd, y")}
-                      </>
+      <div className="flex flex-col md:flex-row md:justify-evenly">
+        <div className="flex flex-col gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="when">On what date(s) do you need GPUs?</Label>
+            <div className={cn("grid gap-2")}>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    id="date"
+                    variant={"outline"}
+                    className={cn(
+                      "w-[300px] justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date?.from ? (
+                      date.to ? (
+                        <>
+                          {format(date.from, "LLL dd, y")} -{" "}
+                          {format(date.to, "LLL dd, y")}
+                        </>
+                      ) : (
+                        format(date.from, "LLL dd, y")
+                      )
                     ) : (
-                      format(date.from, "LLL dd, y")
-                    )
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  initialFocus
-                  mode="range"
-                  defaultMonth={date?.from}
-                  selected={date}
-                  onSelect={setDate}
-                  numberOfMonths={2}
+                      <span>Pick a date</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    initialFocus
+                    mode="range"
+                    defaultMonth={date?.from}
+                    selected={date}
+                    onSelect={setDate}
+                    numberOfMonths={2}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          {date?.from ? (
+            <div className="space-y-2">
+              <Label htmlFor="gpus">
+                What time should your reservation start?
+              </Label>
+              <div className="flex items-center">
+                <p className="mr-2 text-sm">
+                  {format(date.from, "LLL dd, y")} at
+                </p>
+                <TimePicker
+                  selectedTime={startTime}
+                  setSelectedTime={setStartTime}
                 />
-              </PopoverContent>
-            </Popover>
-          </div>
+              </div>
+            </div>
+          ) : null}{" "}
+          {date?.from ? (
+            <div className="space-y-2">
+              <Label htmlFor="gpus">
+                What time should your reservation end?
+              </Label>
+              <div className="flex items-center">
+                <p className="mr-2 text-sm">
+                  {format(date.to || date.from, "LLL dd, y")} at
+                </p>
+                <TimePicker
+                  selectedTime={endTime}
+                  setSelectedTime={setEndTime}
+                />
+              </div>
+            </div>
+          ) : null}
+          <p className="text-lg text-center">
+            <span className="font-semibold">{hoursCount}</span> hour
+            {hoursCount === 1 ? "" : "s"}
+          </p>
         </div>
-        {date?.from ? (
-          <div className="space-y-1">
-            <Label htmlFor="gpus">
-              What time should your reservation start?
-            </Label>
-            <div className="flex items-center">
-              <p className="mr-2 text-sm">
-                {format(date.from, "LLL dd, y")} at
-              </p>
-              <TimePicker
-                selectedTime={startTime}
-                setSelectedTime={setStartTime}
-              />
-            </div>
+        <div className="hidden md:flex">
+          <Separator orientation="vertical" />
+        </div>
+
+        <Separator className="my-8 flex md:hidden" />
+
+        <div className="flex flex-col gap-6 justify-between">
+          <div className="space-y-2">
+            <Label htmlFor="gpus">How many GPUs do you need per hour?</Label>
+            <Slider
+              onValueChange={(val) => setGpuCount(val[0])}
+              defaultValue={[gpuCount]}
+              max={100}
+              step={1}
+            />
           </div>
-        ) : null}{" "}
-        {date?.from ? (
-          <div className="space-y-1">
-            <Label htmlFor="gpus">What time should your reservation end?</Label>
-            <div className="flex items-center">
-              <p className="mr-2 text-sm">
-                {format(date.to || date.from, "LLL dd, y")} at
-              </p>
-              <TimePicker selectedTime={endTime} setSelectedTime={setEndTime} />
-            </div>
-          </div>
-        ) : null}
-        <p className="text-lg text-center">
-          <span className="font-semibold">{hoursCount}</span> hour
-          {hoursCount === 1 ? "" : "s"}
-        </p>
+          <p className="text-lg text-center">
+            <span className="font-semibold">{gpuCount}</span> GPU
+            {gpuCount === 1 ? "" : "s"}
+          </p>
+        </div>
       </div>
 
-      <Separator className="my-8" />
-
-      <div className="flex flex-col gap-6">
-        <Label htmlFor="gpus">How many GPUs do you need per hour?</Label>
-        <Slider
-          onValueChange={(val) => setGpuCount(val[0])}
-          defaultValue={[gpuCount]}
-          max={100}
-          step={1}
-        />
-        <p className="text-lg text-center">
-          <span className="font-semibold">{gpuCount}</span> GPU
-          {gpuCount === 1 ? "" : "s"}
-        </p>
-      </div>
       <Separator className="my-8" />
 
       <div className="flex flex-col gap-6">
