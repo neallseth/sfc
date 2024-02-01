@@ -26,21 +26,26 @@ export default function OrderStatusCard({ countsByTime, order }: Props) {
                 {format(new UTCDate(bidResult.date), "MMM d, yyyy")}
               </span>
               <div>
-                {bidResult.times.map((hour) => {
-                  return (
-                    <div key={hour.time} className="flex">
-                      <span className="text-xs">
-                        {" "}
-                        {hour.time} UTC: {hour.count}/{order.gpus_per_hour}{" "}
-                      </span>
-                      {hour.count === order.gpus_per_hour ? (
-                        <BadgeCheck color="green" className="ml-2 h-4 w-4" />
-                      ) : (
-                        <BadgeAlert color="#F1C40F" className="ml-2 h-4 w-4" />
-                      )}{" "}
-                    </div>
-                  );
-                })}
+                {bidResult.times
+                  .sort((a, b) => (a.time > b.time ? 1 : -1))
+                  .map((hour) => {
+                    return (
+                      <div key={hour.time} className="flex">
+                        <span className="text-xs">
+                          {" "}
+                          {hour.time} UTC: {hour.count}/{order.gpus_per_hour}{" "}
+                        </span>
+                        {hour.count === order.gpus_per_hour ? (
+                          <BadgeCheck color="green" className="ml-2 h-4 w-4" />
+                        ) : (
+                          <BadgeAlert
+                            color="#F1C40F"
+                            className="ml-2 h-4 w-4"
+                          />
+                        )}{" "}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           );

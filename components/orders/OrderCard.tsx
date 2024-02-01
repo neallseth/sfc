@@ -9,6 +9,7 @@ import {
   PencilRuler,
   ArrowBigRight,
   MoveRight,
+  ChevronsUpDown,
 } from "lucide-react";
 import { format } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
@@ -27,13 +28,24 @@ import { formatAsUSD } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
 import OrderStatusCard from "@/components/orders/OrderStatusCard";
 import { toast } from "sonner";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 type Props = {
   type: "bid" | "reservation";
   order: Tables<"bids">;
   pullUserOrders: () => Promise<void>;
+  refreshTime: number | null;
 };
-export default function OrderCard({ type, order, pullUserOrders }: Props) {
+export default function OrderCard({
+  type,
+  order,
+  pullUserOrders,
+  refreshTime,
+}: Props) {
   const [bidResults, setBidResults] = useState<Array<
     Tables<"reserved_gpu_hours">
   > | null>(null);
@@ -69,7 +81,8 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
 
   useEffect(() => {
     pullBidResults();
-  }, []);
+    console.log("pulling bid results");
+  }, [refreshTime]);
 
   async function pullBidResults() {
     const supabase = createClient();
@@ -107,7 +120,7 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
     return (
       <Alert>
         {/* <CircleDashed color="#F1C40F" className="h-4 w-4" /> */}
-        <Badge className="h-4 w-4" />
+        <Badge color="grey" className="h-4 w-4" />
         <AlertTitle className="pr-4">
           Bid: {formatAsUSD(order.total_bid_price)} for{" "}
           {order.total_gpu_hours.toLocaleString()} GPU-hours
@@ -137,7 +150,22 @@ export default function OrderCard({ type, order, pullUserOrders }: Props) {
               </p>
             </div>
           </div>
-          <OrderStatusCard countsByTime={countsByTime} order={order} />
+          <Collapsible>
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full flex border-dotted mt-2"
+              >
+                <span className=" grow">Order status</span>
+                <ChevronsUpDown className="h-4 w-4" />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <OrderStatusCard countsByTime={countsByTime} order={order} />
+            </CollapsibleContent>
+          </Collapsible>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

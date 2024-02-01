@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { useState } from "react";
 
 type Props = {
   user: Tables<"users"> | null;
@@ -25,6 +26,8 @@ type Props = {
 };
 
 export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
+  const [refreshTime, setRefreshTime] = useState<number | null>(null);
+
   if (!user) {
     return;
   }
@@ -47,11 +50,11 @@ export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
                   className="ml-2 sm:ml-6"
                   variant="outline"
                   size="icon"
-                  // onClick={pullUserOrders}
                   onClick={() => {
                     toast.promise(pullUserOrders(), {
                       loading: "Refreshing orders...",
                       success: () => {
+                        setRefreshTime(Date.now());
                         return `Refreshed orders`;
                       },
                       error: "Failed to refresh orders",
@@ -80,6 +83,7 @@ export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
                     type={"bid"}
                     order={bid}
                     pullUserOrders={pullUserOrders}
+                    refreshTime={refreshTime}
                   />
                 );
               })}
