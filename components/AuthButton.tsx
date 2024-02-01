@@ -1,9 +1,9 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { LogIn, Server } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SignInModal } from "./SignInModal";
@@ -45,6 +45,25 @@ type Props = {
 export default function AuthButton({ user, setUser }: Props) {
   const signOut = async () => {};
   const [modalOpen, setModalOpen] = useState(false);
+  const [users, setUsers] = useState<Array<Tables<"users">>>([]);
+
+  useEffect(() => {
+    async function loadUsers() {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("users").select();
+      if (data) {
+        setUsers(data);
+      } else if (error) {
+        console.error(error);
+      }
+    }
+    loadUsers();
+  }, []);
+
+  function handleSignIn(user: Tables<"users"> | null) {
+    setUser(user);
+    localStorage.setItem("recent-user", JSON.stringify(user));
+  }
 
   return user ? (
     <DropdownMenu>
@@ -53,7 +72,9 @@ export default function AuthButton({ user, setUser }: Props) {
           <Button variant={"ghost"}>
             {" "}
             <Avatar className="w-6 h-6 mr-2">
-              <AvatarImage src="./assets/yud.jpg" />
+              <AvatarImage
+                src={user.name === "Neall Seth" ? "./assets/yud.jpg" : ""}
+              />
               <AvatarFallback>{user.name?.split(" ")[0][0]}</AvatarFallback>
             </Avatar>
             {user.name?.split(" ")[0]}
@@ -80,10 +101,6 @@ export default function AuthButton({ user, setUser }: Props) {
             <DropdownMenuShortcut>⌘H</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuItem disabled>
-          <Users className="mr-2 h-4 w-4" />
-          <span>Team</span>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem disabled>
           <Server className="mr-2 h-4 w-4" />
@@ -99,6 +116,27 @@ export default function AuthButton({ user, setUser }: Props) {
           <span>Settings</span>
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <UserPlus className="mr-2 h-4 w-4" />
+            <span>Change user</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              {users.map((user) => {
+                return (
+                  <DropdownMenuItem
+                    key={user.id}
+                    onClick={() => handleSignIn(user)}
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>{user.name}</span>
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
 
         <DropdownMenuItem onClick={() => setUser(null)}>
           <LogOut className="mr-2 h-4 w-4" />
@@ -110,7 +148,9 @@ export default function AuthButton({ user, setUser }: Props) {
     <SignInModal
       modalOpen={modalOpen}
       setModalOpen={setModalOpen}
-      setSignedInUser={setUser}
+      users={users}
+      setUsers={setUsers}
+      handleSignIn={handleSignIn}
     >
       <Button variant="secondary">
         <LogIn className="mr-2 h-4 w-4" /> Login

@@ -8,8 +8,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CloudSun, Server } from "lucide-react";
+import { CloudSun, RefreshCw } from "lucide-react";
 import { Tables } from "@/lib/types/database.types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 type Props = {
   user: Tables<"users"> | null;
@@ -28,9 +35,38 @@ export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
           <CardTitle>{user.name?.split(" ")[0]}'s Orders</CardTitle>
           <CardDescription>Active bids and reservations</CardDescription>
         </div>
-        <Button disabled className="m-0" variant={"outline"}>
-          Order history
-        </Button>
+        <div className="flex">
+          <Button disabled variant="outline">
+            Order history
+          </Button>
+
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="ml-2 sm:ml-6"
+                  variant="outline"
+                  size="icon"
+                  // onClick={pullUserOrders}
+                  onClick={() => {
+                    toast.promise(pullUserOrders(), {
+                      loading: "Refreshing orders...",
+                      success: () => {
+                        return `Refreshed orders`;
+                      },
+                      error: "Failed to refresh orders",
+                    });
+                  }}
+                >
+                  <RefreshCw className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Refresh orders</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CardHeader>
       <CardContent>
         {userBids?.length ? (

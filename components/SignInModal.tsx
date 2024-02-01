@@ -10,24 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
@@ -44,46 +26,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { createClient } from "@/utils/supabase/client";
-import { Database, Tables, Enums } from "@/lib/types/database.types";
+import { Tables } from "@/lib/types/database.types";
 
 type Props = {
   children: React.ReactNode;
   modalOpen: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
-  setSignedInUser: Dispatch<SetStateAction<Tables<"users"> | null>>;
+  users: Array<Tables<"users">>;
+  setUsers: Dispatch<SetStateAction<Array<Tables<"users">>>>;
+  handleSignIn: (user: Tables<"users"> | null) => void;
 };
 
 export function SignInModal({
   children,
   modalOpen,
   setModalOpen,
-  setSignedInUser,
+  users,
+  handleSignIn,
 }: Props) {
-  const [users, setUsers] = useState<Array<Tables<"users">>>([]);
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Tables<"users"> | null>(
     null
   );
-
-  useEffect(() => {
-    async function loadUsers() {
-      const supabase = createClient();
-      const { data, error } = await supabase.from("users").select();
-      if (data) {
-        setUsers(data);
-      } else if (error) {
-        console.error(error);
-      }
-    }
-    loadUsers();
-  }, []);
-
-  function handleSignIn() {
-    setSignedInUser(selectedUser);
-    localStorage.setItem("recent-user", JSON.stringify(selectedUser));
-    setModalOpen(false);
-  }
 
   return (
     <Dialog open={modalOpen} onOpenChange={setModalOpen}>
@@ -150,7 +114,10 @@ export function SignInModal({
 
         <DialogFooter className="flex sm:justify-center">
           <Button
-            onClick={handleSignIn}
+            onClick={() => {
+              handleSignIn(selectedUser);
+              setModalOpen(false);
+            }}
             className="w-full"
             disabled={!selectedUser}
             type="submit"
