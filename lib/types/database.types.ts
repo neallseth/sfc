@@ -146,7 +146,7 @@ export interface Database {
           {
             foreignKeyName: "reserved_gpu_hours_gpu_id_fkey"
             columns: ["gpu_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "gpus"
             referencedColumns: ["id"]
           }
@@ -175,7 +175,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      capacity_day: {
+        Args: Record<PropertyKey, never>
+        Returns: Record<string, unknown>
+      }
     }
     Enums: {
       [_ in never]: never

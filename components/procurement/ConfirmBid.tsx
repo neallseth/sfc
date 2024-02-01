@@ -183,7 +183,7 @@ function BidForm({
       } else {
         await pullUserOrders();
         toast.success("Bid submitted", {
-          description: `${hoursCount * gpuCount} GPU hours`,
+          description: `${(hoursCount * gpuCount).toLocaleString()} GPU-hours`,
         });
 
         // toast.promise(pullUserOrders(), {

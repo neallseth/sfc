@@ -205,7 +205,7 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
       <Separator className="my-8" />
 
       <div className="flex flex-col gap-6">
-        <div className="flex flex-row overflow-auto">
+        {/* <div className="flex flex-row overflow-auto">
           {Array.from({ length: hoursCount }, (_, index) => (
             <div key={index} className="flex flex-col">
               {Array.from({ length: gpuCount }, (_, index) => (
@@ -216,7 +216,7 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
               ))}
             </div>
           ))}
-        </div>
+        </div> */}
         <div className="flex items-center justify-center">
           <div>
             {" "}

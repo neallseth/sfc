@@ -110,7 +110,7 @@ export default function OrderCard({
     toast.promise(deleteAndRefresh(), {
       loading: "Cancelling bid...",
       success: () => {
-        return `Cancelled bid for ${order.total_gpu_hours} GPU-hours`;
+        return `Cancelled bid for ${order.total_gpu_hours.toLocaleString()} GPU-hours`;
       },
       error: "Failed to cancel bid",
     });
@@ -150,22 +150,23 @@ export default function OrderCard({
               </p>
             </div>
           </div>
-          <Collapsible>
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full flex border-dotted mt-2"
-              >
-                <span className=" grow">Order status</span>
-                <ChevronsUpDown className="h-4 w-4" />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <OrderStatusCard countsByTime={countsByTime} order={order} />
-            </CollapsibleContent>
-          </Collapsible>
-
+          {countsByTime.length ? (
+            <Collapsible>
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full flex border-dotted mt-2"
+                >
+                  <span className=" grow">Order status</span>
+                  <ChevronsUpDown className="h-4 w-4" />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <OrderStatusCard countsByTime={countsByTime} order={order} />
+              </CollapsibleContent>
+            </Collapsible>
+          ) : null}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
