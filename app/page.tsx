@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import OrderStatus from "@/components/orders/OrderCard";
 import { Tables } from "@/lib/types/database.types";
 import OrdersView from "@/components/orders/OrdersView";
-import ExploreView from "@/components/ExploreView";
+import ExploreView from "@/components/explore/ExploreView";
 import ProcurementView from "@/components/procurement/ProcurementView";
 import { createClient } from "@/utils/supabase/client";
 
