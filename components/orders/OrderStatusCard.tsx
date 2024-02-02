@@ -16,7 +16,7 @@ type Props = {
 
 export default function OrderStatusCard({ countsByTime, order }: Props) {
   return (
-    <div className="flex flex-col">
+    <div className="flex gap-6 py-6">
       {countsByTime
         .sort((a, b) => (a.date > b.date ? 1 : -1))
         .map((bidResult) => {
@@ -25,7 +25,7 @@ export default function OrderStatusCard({ countsByTime, order }: Props) {
               <span className="text-xs font-semibold">
                 {format(new UTCDate(bidResult.date), "MMM d, yyyy")}
               </span>
-              <div>
+              <div className="flex flex-col gap-2">
                 {bidResult.times
                   .sort((a, b) => (a.time > b.time ? 1 : -1))
                   .map((hour) => {
