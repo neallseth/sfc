@@ -10,6 +10,8 @@ import {
   ListCollapse,
   MoveRight,
   ChevronsUpDown,
+  Hand,
+  Bold,
 } from "lucide-react";
 import { format } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
@@ -117,21 +119,24 @@ export default function OrderCard({
     return (
       <Alert>
         {/* <CircleDashed color="#F1C40F" className="h-4 w-4" /> */}
-        <Badge color="grey" className="h-4 w-4" />
-        <AlertTitle className="pr-4">
-          Bid: {formatAsUSD(order.total_bid_price)} for{" "}
-          {order.total_gpu_hours.toLocaleString()} GPU-hours
+        <CircleDashed color="#d1d1d1" className="h-4 w-4" />
+        <AlertTitle className="pr-4 flex text-sm md:text-md">
+          {/* Bid{" "} */}
+          <span className="grow flex justify-center">
+            {formatAsUSD(order.total_bid_price)} for{" "}
+            {order.total_gpu_hours.toLocaleString()} GPU-hours
+          </span>
         </AlertTitle>
-        <AlertDescription className="flex flex-col gap-2">
-          <p className="text-xs">
-            {order.gpus_per_hour} GPUs for {order.total_hours} hours @ $
-            {order.price_per_gpu_hour}/GPU/hour
+        <AlertDescription className="flex flex-col gap-2 ">
+          <p className="text-xs text-center">
+            {order.gpus_per_hour} GPUs for {order.total_hours} hours @{" "}
+            {formatAsUSD(order.price_per_gpu_hour)}/GPU/hour
           </p>
 
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs">
-                {format(new UTCDate(order.bid_start_time), "MMMM d, yyyy")}
+                {format(new UTCDate(order.bid_start_time), "MMM d, yyyy")}
               </p>
               <p className="text-xs">
                 {format(new UTCDate(order.bid_start_time), "HH:mm") + " UTC"}
@@ -140,7 +145,7 @@ export default function OrderCard({
             <MoveRight className="h-4 w-4" />
             <div>
               <p className="text-xs">
-                {format(new UTCDate(order.bid_end_time), "MMMM d, yyyy")}
+                {format(new UTCDate(order.bid_end_time), "MMM d, yyyy")}
               </p>
               <p className="text-xs">
                 {format(new UTCDate(order.bid_end_time), "HH:mm") + " UTC"}

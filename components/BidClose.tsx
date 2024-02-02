@@ -100,7 +100,7 @@ export function BidClose({ children }: { children: ReactNode }) {
                   {date ? format(date, "PPP") : <span>Set date</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={date}
