@@ -155,7 +155,12 @@ export default function AuthButton({ user, setUser }: Props) {
             </DropdownMenuPortal>
           </DropdownMenuSub>
 
-          <DropdownMenuItem onClick={() => setUser(null)}>
+          <DropdownMenuItem
+            onClick={() => {
+              setUser(null);
+              localStorage.removeItem("recent-user");
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>

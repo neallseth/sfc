@@ -12,18 +12,23 @@ import { createClient } from "@/utils/supabase/client";
 export default function Index() {
   const [user, setUser] = useState<Tables<"users"> | null>(null);
   const [userBids, setUserBids] = useState<Array<Tables<"bids">> | null>(null);
+  const [bidsLoading, setBidsLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
     const lastUsedUser = localStorage.getItem("recent-user");
     if (lastUsedUser) {
+      console.log({ lastUsedUser });
       setUser(JSON.parse(lastUsedUser));
     }
+    setUserLoading(false);
   }, []);
 
   async function pullUserOrders() {
     if (!user) {
       return;
     }
+    setBidsLoading(true);
 
     const supabase = createClient();
     const { data: bids, error } = await supabase
@@ -34,6 +39,7 @@ export default function Index() {
     if (!error) {
       setUserBids(bids);
     }
+    setBidsLoading(false);
   }
 
   useEffect(() => {
@@ -54,6 +60,8 @@ export default function Index() {
           user={user}
           userBids={userBids}
           pullUserOrders={pullUserOrders}
+          bidsLoading={bidsLoading}
+          userLoading={userLoading}
         />
         <ExploreView />
         <ProcurementView user={user} pullUserOrders={pullUserOrders} />

@@ -7,6 +7,8 @@ import {
   Switch,
   Title,
 } from "@tremor/react";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { useEffect, useState } from "react";
 import { capacitySchema, CapacityType } from "@/lib/types/schemas";
 import {
@@ -65,6 +67,16 @@ export default function CapacityChart() {
           />
         </CardContent>
       </Card>
+    );
+  } else {
+    return (
+      <div className="flex gap-2 grow">
+        <Skeleton className="h-36 w-4" />
+        <div className="flex flex-col gap-2 grow min-w-72">
+          <Skeleton className="h-36" />
+          <Skeleton className="h-4" />
+        </div>
+      </div>
     );
   }
 }

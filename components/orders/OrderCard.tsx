@@ -35,6 +35,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   type: "bid" | "reservation";
@@ -115,88 +116,85 @@ export default function OrderCard({
     });
   }
 
-  if (type === "bid") {
-    return (
-      <Alert>
-        {/* <CircleDashed color="#F1C40F" className="h-4 w-4" /> */}
-        <CircleDashed color="#d1d1d1" className="h-4 w-4" />
-        <AlertTitle className="pr-4 flex text-sm md:text-md">
-          {/* Bid{" "} */}
-          <span className="grow flex justify-center">
-            {formatAsUSD(order.total_bid_price)} for{" "}
-            {order.total_gpu_hours.toLocaleString()} GPU-hours
-          </span>
-        </AlertTitle>
-        <AlertDescription className="flex flex-col gap-2 ">
-          <p className="text-xs text-center">
-            {order.gpus_per_hour} GPUs for {order.total_hours} hours @{" "}
-            {formatAsUSD(order.price_per_gpu_hour)}/GPU/hour
-          </p>
+  return (
+    <Alert>
+      <CircleDashed color="#d1d1d1" className="h-4 w-4" />
+      <AlertTitle className="pr-4 flex text-sm md:text-md">
+        {/* Bid{" "} */}
+        <span className="grow flex justify-center">
+          {formatAsUSD(order.total_bid_price)} for{" "}
+          {order.total_gpu_hours.toLocaleString()} GPU-hours
+        </span>
+      </AlertTitle>
+      <AlertDescription className="flex flex-col gap-2 ">
+        <p className="text-xs text-center">
+          {order.gpus_per_hour} GPUs for {order.total_hours} hours @{" "}
+          {formatAsUSD(order.price_per_gpu_hour)}/GPU/hour
+        </p>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs">
-                {format(new UTCDate(order.bid_start_time), "MMM d, yyyy")}
-              </p>
-              <p className="text-xs">
-                {format(new UTCDate(order.bid_start_time), "HH:mm") + " UTC"}
-              </p>
-            </div>
-            <MoveRight className="h-4 w-4" />
-            <div>
-              <p className="text-xs">
-                {format(new UTCDate(order.bid_end_time), "MMM d, yyyy")}
-              </p>
-              <p className="text-xs">
-                {format(new UTCDate(order.bid_end_time), "HH:mm") + " UTC"}
-              </p>
-            </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs">
+              {format(new UTCDate(order.bid_start_time), "MMM d, yyyy")}
+            </p>
+            <p className="text-xs">
+              {format(new UTCDate(order.bid_start_time), "HH:mm") + " UTC"}
+            </p>
           </div>
-          {countsByTime.length ? (
-            <Collapsible>
-              <CollapsibleTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full flex border-dotted mt-2"
-                >
-                  <span className=" grow">Order status</span>
-                  <ChevronsUpDown className="h-4 w-4" />
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <OrderStatusCard countsByTime={countsByTime} order={order} />
-              </CollapsibleContent>
-            </Collapsible>
-          ) : null}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <MoveRight className="h-4 w-4" />
+          <div>
+            <p className="text-xs">
+              {format(new UTCDate(order.bid_end_time), "MMM d, yyyy")}
+            </p>
+            <p className="text-xs">
+              {format(new UTCDate(order.bid_end_time), "HH:mm") + " UTC"}
+            </p>
+          </div>
+        </div>
+        {countsByTime.length ? (
+          <Collapsible>
+            <CollapsibleTrigger asChild>
               <Button
-                className="absolute top-0 right-0 rounded-full"
-                variant="ghost"
-                size="icon"
+                variant="outline"
+                size="sm"
+                className="w-full flex border-dotted mt-2"
               >
-                <MoreHorizontal className="h-4 w-4" />
+                <span className=" grow">Order status</span>
+                <ChevronsUpDown className="h-4 w-4" />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem disabled>
-                <ListCollapse className="mr-2 h-4 w-4" />
-                <span>Full details</span>
-              </DropdownMenuItem>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <OrderStatusCard countsByTime={countsByTime} order={order} />
+            </CollapsibleContent>
+          </Collapsible>
+        ) : null}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              className="absolute top-0 right-0 rounded-full"
+              variant="ghost"
+              size="icon"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem disabled>
+              <ListCollapse className="mr-2 h-4 w-4" />
+              <span>Full details</span>
+            </DropdownMenuItem>
 
-              <DropdownMenuItem disabled>
-                <PencilRuler className="mr-2 h-4 w-4" />
-                <span>Modify bid</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleOrderCancel(order.id)}>
-                <Ban className="mr-2 h-4 w-4" />
-                <span>Cancel bid</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </AlertDescription>
-      </Alert>
-    );
-  }
+            <DropdownMenuItem disabled>
+              <PencilRuler className="mr-2 h-4 w-4" />
+              <span>Modify bid</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleOrderCancel(order.id)}>
+              <Ban className="mr-2 h-4 w-4" />
+              <span>Cancel bid</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </AlertDescription>
+    </Alert>
+  );
 }

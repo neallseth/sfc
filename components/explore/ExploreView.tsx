@@ -52,7 +52,7 @@ export const chartdata = [
 export default function ExploreView() {
   return (
     <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-      <Card className="w-full md:max-w-fit p-6 flex flex-col justify-between gap-4 md:gap-6">
+      <Card className="w-full md:max-w-60 p-6 flex flex-col justify-between gap-4 md:gap-6">
         <div>
           <Flex justifyContent="between" alignItems="center">
             <Text>$/GPU/hour</Text>
