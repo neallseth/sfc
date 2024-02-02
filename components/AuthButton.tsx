@@ -34,8 +34,10 @@ import {
   UserPlus,
   Users,
   History,
+  PanelBottomClose,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BidClose } from "@/components/BidClose";
 
 type Props = {
   user: Tables<"users"> | null;
@@ -117,6 +119,12 @@ export default function AuthButton({ user, setUser }: Props) {
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSub>
+          <BidClose>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <PanelBottomClose className="mr-2 h-4 w-4" />
+              <span>Close auction</span>
+            </DropdownMenuItem>
+          </BidClose>
           <DropdownMenuSubTrigger>
             <UserPlus className="mr-2 h-4 w-4" />
             <span>Change user</span>

@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Clock } from "lucide-react";
 
 type timeOption = {
   value: string;
@@ -67,8 +68,15 @@ export default function TimePicker({
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[150px] justify-start">
-            {selectedTime ? <>{selectedTime.label}</> : <>+ Set time</>}
+          <Button variant="outline" className="font-normal">
+            {selectedTime ? (
+              <>{selectedTime.label}</>
+            ) : (
+              <>
+                <Clock className="mr-2 h-4 w-4" />
+                Set time
+              </>
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
@@ -81,8 +89,15 @@ export default function TimePicker({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="w-[150px] justify-start">
-          {selectedTime ? <>{selectedTime.label}</> : <>+ Set time</>}
+        <Button variant="outline" className="font-normal">
+          {selectedTime ? (
+            <>{selectedTime.label}</>
+          ) : (
+            <>
+              <Clock className="mr-2 h-4 w-4" />
+              Set time
+            </>
+          )}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
