@@ -1,7 +1,7 @@
 import {
   AreaChart,
   BarChart,
-  Card,
+  // Card,
   Flex,
   Subtitle,
   Switch,
@@ -9,37 +9,14 @@ import {
 } from "@tremor/react";
 import { useEffect, useState } from "react";
 import { capacitySchema, CapacityType } from "@/lib/types/schemas";
-
-// const chartdata = [
-//   {
-//     name: "Amphibians",
-//     "Number of threatened species": 2488,
-//   },
-//   {
-//     name: "Birds",
-//     "Number of threatened species": 1445,
-//   },
-//   {
-//     name: "Crustaceans",
-//     "Number of threatened species": 743,
-//   },
-//   {
-//     name: "Ferns",
-//     "Number of threatened species": 281,
-//   },
-//   {
-//     name: "Arachnids",
-//     "Number of threatened species": 251,
-//   },
-//   {
-//     name: "Corals",
-//     "Number of threatened species": 232,
-//   },
-//   {
-//     name: "Algae",
-//     "Number of threatened species": 98,
-//   },
-// ];
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const valueFormatter = (number: number) =>
   new Intl.NumberFormat("us").format(number).toString();
@@ -65,22 +42,28 @@ export default function CapacityChart() {
 
   if (chartData) {
     return (
-      <Card>
-        <Title>Available GPU capacity</Title>
-        <Subtitle>GPU-hours available for the next 30 days</Subtitle>
-        <BarChart
-          className="mt-6"
-          data={chartData}
-          index="date"
-          categories={["capacity"]}
-          colors={["gray"]}
-          valueFormatter={valueFormatter}
-          startEndOnly={true}
-          showAnimation={true}
-          showLegend={false}
-          // autoMinValue={true}
-          yAxisWidth={48}
-        />
+      <Card className="grow">
+        <CardHeader>
+          <CardTitle>Available GPU capacity</CardTitle>
+          <CardDescription>
+            GPU-hours available for the next 30 days
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <BarChart
+            className=" h-24"
+            data={chartData}
+            index="date"
+            categories={["capacity"]}
+            colors={["gray"]}
+            valueFormatter={valueFormatter}
+            startEndOnly={true}
+            showAnimation={true}
+            showLegend={false}
+            // autoMinValue={true}
+            yAxisWidth={48}
+          />
+        </CardContent>
       </Card>
     );
   }

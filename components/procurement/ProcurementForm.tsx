@@ -102,7 +102,7 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
       <div className="flex flex-col md:flex-row md:justify-evenly pt-2 md:pt-4">
         <div className="flex flex-col gap-6">
           <div className="space-y-2">
-            <Label htmlFor="when">On what date(s) do you need GPUs?</Label>
+            <Label htmlFor="when">On which date(s) do you need GPUs?</Label>
             <div className={cn("grid gap-2")}>
               <Popover>
                 <PopoverTrigger asChild>

@@ -35,7 +35,9 @@ export default function ProcurementView({ user, pullUserOrders }: Props) {
       <CardHeader className="flex flex-row justify-between items-center space-y-0">
         <div>
           <CardTitle>Get Compute</CardTitle>
-          <CardDescription>Place a bid for the GPUs you need</CardDescription>
+          <CardDescription className="mt-2">
+            Place a bid for the GPUs you need
+          </CardDescription>
         </div>
         <Select value="ang">
           <SelectTrigger className="w-[180px]">

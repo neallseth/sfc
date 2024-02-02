@@ -36,7 +36,9 @@ export default function OrdersView({ user, userBids, pullUserOrders }: Props) {
       <CardHeader className="flex flex-row justify-between items-center space-y-0">
         <div>
           <CardTitle>{user.name?.split(" ")[0]}'s Orders</CardTitle>
-          <CardDescription>Active bids and reservations</CardDescription>
+          <CardDescription className="mt-2">
+            Active bids and reservations
+          </CardDescription>
         </div>
         <div className="flex">
           <Button disabled variant="outline">
