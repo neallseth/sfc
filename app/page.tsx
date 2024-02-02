@@ -34,12 +34,6 @@ export default function Index() {
     if (!error) {
       setUserBids(bids);
     }
-
-    let { data: capacity, error: capcityError } = await supabase.rpc(
-      "capacity_day"
-    );
-    if (capcityError) console.error(error);
-    else console.log(capacity);
   }
 
   useEffect(() => {

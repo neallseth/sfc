@@ -7,7 +7,7 @@ import {
   MoreHorizontal,
   FilePenLine,
   PencilRuler,
-  ArrowBigRight,
+  ListCollapse,
   MoveRight,
   ChevronsUpDown,
 } from "lucide-react";
@@ -75,13 +75,11 @@ export default function OrderCard({
       }));
       return { date, times: timesArray };
     });
-    console.log(counts);
     return counts;
   }, [bidResults]);
 
   useEffect(() => {
     pullBidResults();
-    console.log("pulling bid results");
   }, [refreshTime]);
 
   async function pullBidResults() {
@@ -94,7 +92,6 @@ export default function OrderCard({
       console.error(error);
     } else {
       setBidResults(data);
-      console.log(data);
     }
   }
 
@@ -178,13 +175,18 @@ export default function OrderCard({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <ListCollapse className="mr-2 h-4 w-4" />
+                <span>Full details</span>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem disabled>
                 <PencilRuler className="mr-2 h-4 w-4" />
-                <span>Modify Bid</span>
+                <span>Modify bid</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleOrderCancel(order.id)}>
                 <Ban className="mr-2 h-4 w-4" />
-                <span>Cancel Bid</span>
+                <span>Cancel bid</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
