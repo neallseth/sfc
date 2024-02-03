@@ -8,7 +8,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "SF Compute",
+  title: "SFC Reservations",
   description: "Reserve GPUs",
 };
 

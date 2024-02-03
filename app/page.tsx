@@ -8,6 +8,7 @@ import OrdersView from "@/components/orders/OrdersView";
 import ExploreView from "@/components/explore/ExploreView";
 import ProcurementView from "@/components/procurement/ProcurementView";
 import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export default function Index() {
   const [user, setUser] = useState<Tables<"users"> | null>(null);

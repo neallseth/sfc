@@ -37,6 +37,7 @@ import {
   Users,
   History,
   PanelBottomClose,
+  NotepadText,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CloseAuction } from "@/components/CloseAuction";
@@ -138,6 +139,13 @@ export default function AuthButton({ user, setUser }: Props) {
               <UserPlus className="mr-2 h-4 w-4" />
               <span>Change user</span>
             </DropdownMenuSubTrigger>
+            <Link href="/notes" target="_blank">
+              <DropdownMenuItem>
+                <NotepadText className="mr-2 h-4 w-4" />
+                <span>Notes</span>
+              </DropdownMenuItem>
+            </Link>
+
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 {users.map((user) => {

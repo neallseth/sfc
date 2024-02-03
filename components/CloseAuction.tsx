@@ -44,7 +44,7 @@ export function CloseAuction({ closeBidModal }: Props) {
     }
     setSubmitted(true);
     try {
-      const response = await fetch("/api/close-bid", {
+      const response = await fetch("/api/close-auction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

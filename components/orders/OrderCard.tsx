@@ -157,7 +157,7 @@ export default function OrderCard({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full flex border-dotted mt-2"
+                className="w-full flex border-dotted mt-2 font-normal"
               >
                 <span className=" grow">Order status</span>
                 <ChevronsUpDown className="h-4 w-4" />
