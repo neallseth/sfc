@@ -16,12 +16,12 @@ type Props = {
 
 export default function OrderStatusCard({ countsByTime, order }: Props) {
   return (
-    <div className="flex gap-6 py-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-4">
       {countsByTime
         .sort((a, b) => (a.date > b.date ? 1 : -1))
         .map((bidResult) => {
           return (
-            <div key={bidResult.date}>
+            <div key={bidResult.date} className="">
               <span className="text-xs font-semibold">
                 {format(new UTCDate(bidResult.date), "MMM d, yyyy")}
               </span>

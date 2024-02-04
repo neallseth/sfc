@@ -59,8 +59,8 @@ export default function OrderCard({
 
     bidResults?.forEach((res) => {
       const dateTime = new Date(res.hour_start_time);
-      const date = dateTime.toISOString().split("T")[0]; // This is already in UTC
-      const time = dateTime.toISOString().split("T")[1].substring(0, 5); // This is also in UTC
+      const date = dateTime.toISOString().split("T")[0];
+      const time = dateTime.toISOString().split("T")[1].substring(0, 5);
 
       if (!groupedByDateAndTime[date]) {
         groupedByDateAndTime[date] = {};
@@ -118,17 +118,15 @@ export default function OrderCard({
 
   return (
     <Alert>
-      <CircleDashed color="#d1d1d1" className="h-4 w-4" />
-      <AlertTitle className="pr-4 flex text-sm md:text-md">
-        {/* Bid{" "} */}
+      {/* <CircleDashed color="#d1d1d1" className="h-4 w-4" /> */}
+      <CircleDashed color="#dbc265" className="h-4 w-4" />
+      <AlertTitle className="pr-7 flex text-sm md:text-md">
         <span className="grow flex justify-center">
-          {formatAsUSD(order.total_bid_price)} for{" "}
-          {order.total_gpu_hours.toLocaleString()} GPU-hours
+          {order.gpus_per_hour} GPUs for {order.total_hours} hours
         </span>
       </AlertTitle>
       <AlertDescription className="flex flex-col gap-2 ">
-        <p className="text-xs text-center">
-          {order.gpus_per_hour} GPUs for {order.total_hours} hours @{" "}
+        <p className="text-xs text-center pr-7">
           {formatAsUSD(order.price_per_gpu_hour)}/GPU/hour
         </p>
 

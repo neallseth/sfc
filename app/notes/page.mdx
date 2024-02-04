@@ -29,11 +29,6 @@
 - Next.js front-end + serverless functions
 - Supabase managed Postgres
 
-### Assumptions
-
-- 100 GPUs available per hour
-- People are okay with winning partial blocks (if they weren't, they'd "instant book" instead)
-
 ### Available endpoints
 
 - GET /api/capacity
@@ -54,7 +49,7 @@
 
 ### Other ideas
 
-#### Bidding vs instant reservation
+#### Auction vs instant reservation
 
 - I think it'd be crucial to have an "Instant Reservation" option, a la Ebay's "Buy it now." This would enable paying a premium for guaranteed, full-block reservations.
 - I imagine "Instant Reservation" would be ideal for larger, inflexible buyers
@@ -67,9 +62,9 @@
 - Rough example function: f(x) = 0.468ln(x+1) + .6
   - When x > 168 hours (1 week), f(x) = market_rate
 
-#### Point system (for bidding)
+#### Point system (for auction)
 
-- A point system could offer knobs for tuning incentives.
+- A point system could offer a dial to tune incentives.
 - The points associated with any given GPU-hour bid could be a function of both price and block size (of the whole bid).
   - Example function: f(s, p) = .3sqrt(s) + .7p
     - Where s is full block size, and p is price per GPU-hour
