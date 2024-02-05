@@ -31,9 +31,7 @@ export default function CapacityChart() {
       try {
         const response = await fetch("/api/capacity");
         const data = await response.json();
-        console.log(data);
         const parsedData = capacitySchema.parse(data);
-        console.log({ parsedData });
         setChartData(parsedData);
       } catch (err) {
         console.error(err);

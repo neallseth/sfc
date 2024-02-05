@@ -185,14 +185,6 @@ function BidForm({
         toast.success("Bid submitted", {
           description: `${(hoursCount * gpuCount).toLocaleString()} GPU-hours`,
         });
-
-        // toast.promise(pullUserOrders(), {
-        //   loading: "Submitting bid...",
-        //   success: () => {
-        //     return `Bid submitted: ${hoursCount * gpuCount} GPU hours`;
-        //   },
-        //   error: "Failed to submit bid",
-        // });
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -200,7 +192,7 @@ function BidForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className={cn("grid items-start gap-4 px-4")}>
+    <form onSubmit={handleSubmit} className={cn("grid items-start gap-4")}>
       <p>
         <span className="font-bold">{gpuCount}</span> GPUs per hour, for{" "}
         <span className="font-bold">{hoursCount}</span> hours
@@ -244,8 +236,10 @@ function BidForm({
       ) : null}
       <Separator />
       <p className="">
-        Total: <span className="font-bold">{hoursCount * gpuCount}</span> GPU
-        hours for{" "}
+        <span className="font-bold">
+          {(hoursCount * gpuCount).toLocaleString()}
+        </span>{" "}
+        GPU hours for{" "}
         <span className="font-bold">{formatAsUSD(bidTotalPrice)}</span>
       </p>
       {submitted ? (

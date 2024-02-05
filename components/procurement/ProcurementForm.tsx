@@ -66,7 +66,6 @@ export default function ProcurementForm({ user, pullUserOrders }: Props) {
     if (date?.from && startTime) {
       const newStartDate = parseDateAsUTC(date.from);
       newStartDate.setUTCHours(Number(startTime.value), 0, 0, 0);
-      console.log(newStartDate);
       return newStartDate;
     }
   }, [date?.from, startTime]);

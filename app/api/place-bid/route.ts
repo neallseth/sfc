@@ -30,14 +30,6 @@ export async function POST(request: NextRequest) {
     } = bid.parse(await request.json());
     const supabase = createClient(cookieStore);
 
-    console.log({
-      user_id,
-      bid_start_time,
-      bid_end_time,
-      gpus_per_hour,
-      price_per_gpu_hour,
-    });
-
     const { error } = await supabase.from("bids").insert({
       user_id,
       bid_start_time,

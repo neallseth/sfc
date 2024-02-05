@@ -62,7 +62,6 @@ export async function POST(request: NextRequest) {
       const newReservations = [];
       let capacityExhausted = false;
       for (const bid of bids) {
-        console.log(bid);
         if (capacityExhausted) {
           break;
         }

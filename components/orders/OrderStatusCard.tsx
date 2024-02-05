@@ -2,6 +2,12 @@ import { format } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
 import { Tables } from "@/lib/types/database.types";
 import { BadgeCheck, BadgeAlert } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
   countsByTime: {
@@ -37,15 +43,33 @@ export default function OrderStatusCard({ countsByTime, order }: Props) {
                             {hour.time} UTC: {hour.count}/{order.gpus_per_hour}{" "}
                           </span>
                           {hour.count === order.gpus_per_hour ? (
-                            <BadgeCheck
-                              color="green"
-                              className="ml-2 h-4 w-4"
-                            />
+                            <TooltipProvider>
+                              <Tooltip delayDuration={0}>
+                                <TooltipTrigger>
+                                  <BadgeCheck
+                                    color="green"
+                                    className="ml-2 h-4 w-4"
+                                  />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Full amount received</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           ) : (
-                            <BadgeAlert
-                              color="#F1C40F"
-                              className="ml-2 h-4 w-4"
-                            />
+                            <TooltipProvider>
+                              <Tooltip delayDuration={0}>
+                                <TooltipTrigger>
+                                  <BadgeAlert
+                                    color="#F1C40F"
+                                    className="ml-2 h-4 w-4"
+                                  />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Partial amount received</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           )}{" "}
                         </div>
                       );

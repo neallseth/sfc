@@ -82,8 +82,6 @@ export function SignInModal({
                       key={user.id}
                       value={user.name || ""}
                       onSelect={(currentValue) => {
-                        console.log(currentValue);
-                        console.log(users);
                         const selected = users.find(
                           (user) =>
                             user.name?.toLowerCase() ===

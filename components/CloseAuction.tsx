@@ -60,7 +60,6 @@ export function CloseAuction({ closeBidModal }: Props) {
             `,
         });
         const data = await response.json();
-        console.log("Success:", data);
       }
     } catch (error) {
       console.error("Error:", error);

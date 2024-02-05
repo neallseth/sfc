@@ -19,7 +19,6 @@ export default function Index() {
   useEffect(() => {
     const lastUsedUser = localStorage.getItem("recent-user");
     if (lastUsedUser) {
-      console.log({ lastUsedUser });
       setUser(JSON.parse(lastUsedUser));
     }
     setUserLoading(false);

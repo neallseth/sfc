@@ -179,7 +179,7 @@ export default function OrderCard({
           <DropdownMenuContent>
             <DropdownMenuItem disabled>
               <ListCollapse className="mr-2 h-4 w-4" />
-              <span>Full details</span>
+              <span>Bid details</span>
             </DropdownMenuItem>
 
             <DropdownMenuItem disabled>
