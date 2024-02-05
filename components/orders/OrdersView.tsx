@@ -40,12 +40,7 @@ export default function OrdersView({
   if ((!user && userLoading) || bidsLoading) {
     return (
       <div className="flex flex-col gap-2 grow">
-        <div className="flex gap-2">
-          <Skeleton className="h-16 w-1/3" />
-          <Skeleton className="h-16 w-1/3" />
-          <Skeleton className="h-16 w-1/3" />
-        </div>
-        <Skeleton className="h-48" />
+        <Skeleton className="h-64" />
       </div>
     );
   } else if (user) {
