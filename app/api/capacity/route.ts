@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
     const reservations = rawReservations
       ? reservationSchema.parse(rawReservations)
       : {};
+
     const today = new UTCDate();
 
     const data: CapacityType = [];

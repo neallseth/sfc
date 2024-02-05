@@ -117,8 +117,7 @@ export default function OrderCard({
   }
 
   return (
-    <Alert>
-      {/* <CircleDashed color="#d1d1d1" className="h-4 w-4" /> */}
+    <Alert className="border-dashed">
       <CircleDashed color="#dbc265" className="h-4 w-4" />
       <AlertTitle className="pr-7 flex text-sm md:text-md">
         <span className="grow flex justify-center">
