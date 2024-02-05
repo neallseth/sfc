@@ -6,8 +6,8 @@
 - Close the auction (dropdown menu) for an hour that falls within your bid range
 - Refresh and observe the filled order (based on capacity, price, and competing bids)
 - Observe changes in available capacity
-- Sign in as other user and repeat (all users occupy the same "world" and compete for same GPUs)
-- Feel free to try cancelling/creating bids, re-closing auctions (would never happen in real life but gives you a chance to experiment with the system)
+- Sign in as another user and repeat (all users occupy the same "world" and compete for same GPUs)
+- Feel free to try canceling, re-creating bids, or re-closing auctions (would never happen in real life but gives you a chance to experiment with the system)
 - If anything is confusing or appears broken, let me know!
 
 ### Auction structure
@@ -23,8 +23,8 @@
 
 ### Implementation things
 
-- A couple buttons are perma-disabled, I included them for design completeness
-- Initially, I was going to use a cron job to automatically close auctions for each hour, on an hourly basis, as some form of this would exist in production. I realized this was annoying to test/review, so I made it accessible via UI instead (dropdown, top-right corner).
+- A few buttons are perma-disabled, I included them for design completeness
+- Initially, I was going to use a cron job to automatically close auctions on an hourly basis (e.g., one week before "activation"), as some form of this would exist in production. I realized this was annoying to test/review, so I made it accessible via UI instead (dropdown, top-right corner).
 - All dates are in UTC unless stated otherwise
 - I went with the GPU-hour level of resolution, rather than GPU-day (for liquidity purposes)
 - I've included a cluster selector, but this could likely be abstracted away from the user entirely
@@ -35,7 +35,7 @@
 
 - I think it'd be crucial to have an "Instant Reservation" option, a la Ebay's "Buy it now." This would enable paying a premium for guaranteed, full-block reservations.
 - I imagine "Instant Reservation" would be ideal for larger, inflexible buyers
-- Bidding would be ideal for smaller, cost-sensitive, or otherwise flexible buyers
+- Auctions would be ideal for smaller, cost-sensitive, or otherwise flexible buyers
 - The former group would presumably take the majority of capacity, with the remaining bits being auctioned off
 
 #### Pricing system (for instant reservation)
@@ -48,8 +48,8 @@
 
 - A point system could offer a dial to tune incentives.
 - The points associated with any given GPU-hour bid could be a function of both price and block size (of the whole bid).
-  - Example function: f(s, p) = .3sqrt(s) + .7p
-    - Where s is full block size, and p is price per GPU-hour
+- Example function: f(s, p) = .3sqrt(s) + .7p
+  - Where _s_ is full block size, and _p_ is price per GPU-hour
 - This could incentivize larger block purchases, without letting large buyers dominate with massive, low-priced block bids (curtailed by the sqrt)
 
 ### If this were a production codebase, I would

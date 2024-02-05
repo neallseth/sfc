@@ -118,7 +118,7 @@ export default function OrderCard({
 
   return (
     <Alert className="border-dashed">
-      <CircleDashed color="#dbc265" className="h-4 w-4" />
+      {/* <CircleDashed color="#dbc265" className="h-4 w-4" /> */}
       <AlertTitle className="pr-7 flex text-sm md:text-md">
         <span className="grow flex justify-center">
           {order.gpus_per_hour} GPUs for {order.total_hours} hours
