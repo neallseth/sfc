@@ -89,7 +89,7 @@ export function CloseAuction({ closeBidModal }: Props) {
       </DialogHeader>
       <div>
         <div className="flex justify-between gap-4">
-          <Popover>
+          <Popover modal={true}>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}

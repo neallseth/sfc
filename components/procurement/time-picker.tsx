@@ -66,7 +66,7 @@ export default function TimePicker({
 
   if (isDesktop) {
     return (
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover modal={true} open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="font-normal">
             {selectedTime ? (
