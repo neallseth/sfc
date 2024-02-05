@@ -1,4 +1,4 @@
-import { cn, formatAsUSD } from "@/lib/utils";
+import { cn, formatAsUSD } from "@/utils/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {

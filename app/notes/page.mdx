@@ -1,21 +1,55 @@
 # Notes
 
-### How to start playing with this
+### Ways to start playing with this
 
-- Sign in as any user
-- Place a bid
+- Sign in as any user, place a bid
 - Close the auction (dropdown menu) for an hour that falls within your bid range
-- Observe how the order is filled (based on capacity, price, and competing bids)
-- Notice changes in available capacity
-- Sign in as another user and repeat (all users occupy the same "world" and compete for same GPUs)
+- Refresh and observe the filled order (based on capacity, price, and competing bids)
+- Observe changes in available capacity
+- Sign in as other user and repeat (all users occupy the same "world" and compete for same GPUs)
 - Feel free to try cancelling/creating bids, re-closing auctions (would never happen in real life but gives you a chance to experiment with the system)
 - If anything is confusing or appears broken, let me know!
+
+### Auction structure
+
+- I've built a [discriminatory price](https://en.wikipedia.org/wiki/Multiunit_auction), sealed bid auction system
+- In production, I suspect an open-bid format (where bidders can see max bid) might be better
 
 ### How it works
 
 - Abstract representations of GPUs are maintained; they can be allocated no more than once per hour
 - Users can place bids for X GPUs, for Y amount of time, at Z price
 - When the auction for a given hour closes, all GPUs (starting capacity of 100) are allocated in order of bid amount, until capacity is exhausted
+
+### Implementation things
+
+- A couple buttons are perma-disabled, I included them for design completeness
+- Initially, I was going to use a cron job to automatically close auctions for each hour, on an hourly basis, as some form of this would exist in production. I realized this was annoying to test/review, so I made it accessible via UI instead (dropdown, top-right corner).
+- All dates are in UTC unless stated otherwise
+- I went with the GPU-hour level of resolution, rather than GPU-day (for liquidity purposes)
+
+### Other ideas
+
+#### Auction vs instant reservation
+
+- I think it'd be crucial to have an "Instant Reservation" option, a la Ebay's "Buy it now." This would enable paying a premium for guaranteed, full-block reservations.
+- I imagine "Instant Reservation" would be ideal for larger, inflexible buyers
+- Bidding would be ideal for smaller, cost-sensitive, or otherwise flexible buyers
+- The former group would presumably take the majority of capacity, with the remaining bits being auctioned off
+
+#### Pricing system (for instant reservation)
+
+- The pricing function should probably slope upwards gradually, then flatten. I.e., cheaper last-minute reservations to "clear" any remaining capacity.
+- Rough example function: f(x) = 0.468ln(x+1) + .6
+  - When x > 168 hours (1 week), f(x) = market_rate
+
+#### Point system (for auction)
+
+- A point system could offer a dial to tune incentives.
+- The points associated with any given GPU-hour bid could be a function of both price and block size (of the whole bid).
+  - Example function: f(s, p) = .3sqrt(s) + .7p
+    - Where s is full block size, and p is price per GPU-hour
+- This could incentivize larger block purchases, without letting large buyers dominate with massive, low-priced block bids (curtailed by the sqrt)
 
 ### If this were a production codebase, I would
 
@@ -34,40 +68,5 @@
 - GET /api/capacity
 - POST /api/close-auction
 - POST /api/place-bid
-
-### Implementation things
-
-- A couple buttons are perma-disabled, I included them for design completeness
-- Initially, I was going to use a cron job to automatically close auctions for each hour, on an hourly basis, as some form of this would exist in production. I realized this was annoying to test/review, so I made it accessible via UI instead (dropdown, top-right corner).
-- All dates are in UTC unless stated otherwise
-- I went with the GPU-hour level of resolution, rather than GPU-day (for liquidity purposes)
-
-### Auction structure
-
-- I've built a [discriminatory price](https://en.wikipedia.org/wiki/Multiunit_auction), sealed bid auction system
-- In production, I suspect an open-bid format (where bidders can see max bid) might be better
-
-### Other ideas
-
-#### Auction vs instant reservation
-
-- I think it'd be crucial to have an "Instant Reservation" option, a la Ebay's "Buy it now." This would enable paying a premium for guaranteed, full-block reservations.
-- I imagine "Instant Reservation" would be ideal for larger, inflexible buyers
-- Bidding would be ideal for smaller, cost-sensitive, or otherwise flexible buyers
-- The former group would presumably take the majority of capacity, with the remaining bits being auctioned off
-
-#### Pricing system (for instant reservation)
-
-- The pricing function should probably slope upwards gradually. I.e., cheaper reservations now (if available), and more expensive as reservation date is further in the future
-- Rough example function: f(x) = 0.468ln(x+1) + .6
-  - When x > 168 hours (1 week), f(x) = market_rate
-
-#### Point system (for auction)
-
-- A point system could offer a dial to tune incentives.
-- The points associated with any given GPU-hour bid could be a function of both price and block size (of the whole bid).
-  - Example function: f(s, p) = .3sqrt(s) + .7p
-    - Where s is full block size, and p is price per GPU-hour
-- This could incentivize larger block purchases, without letting whales dominate with massive, low-priced blocks (curtailed by the sqrt)
 
 If there's anything I didn't include in the project/notes, there's a good chance I've thought about it - feel free to ask

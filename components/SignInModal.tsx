@@ -13,7 +13,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import {
   Command,
   CommandEmpty,

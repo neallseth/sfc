@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import TimePicker from "@/components/procurement/time-picker";
 import { UTCDate } from "@date-fns/utc";
 import { toast } from "sonner";

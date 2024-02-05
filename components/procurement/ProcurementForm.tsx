@@ -17,7 +17,7 @@ import { Calendar as CalendarIcon, Info } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { UTCDate } from "@date-fns/utc";
 
-import { cn, formatAsUSD } from "@/lib/utils";
+import { cn, formatAsUSD } from "@/utils/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,

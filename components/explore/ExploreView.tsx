@@ -1,4 +1,4 @@
-import { formatAsUSD } from "@/lib/utils";
+import { formatAsUSD } from "@/utils/utils";
 import { BadgeDelta, Flex, Metric, Text } from "@tremor/react";
 import CapacityChart from "@/components/explore/CapacityChart";
 import { SparkAreaChart, SparkLineChart, SparkBarChart } from "@tremor/react";

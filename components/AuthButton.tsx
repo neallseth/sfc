@@ -123,6 +123,13 @@ export default function AuthButton({ user, setUser }: Props) {
             <span>Settings</span>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
+          <Link href="/notes" target="_blank">
+            <DropdownMenuItem>
+              <NotepadText className="mr-2 h-4 w-4" />
+              <span>Notes</span>
+            </DropdownMenuItem>
+          </Link>
+
           <DropdownMenuSub>
             <DialogTrigger asChild>
               <DropdownMenuItem
@@ -139,13 +146,6 @@ export default function AuthButton({ user, setUser }: Props) {
               <UserPlus className="mr-2 h-4 w-4" />
               <span>Change user</span>
             </DropdownMenuSubTrigger>
-            <Link href="/notes" target="_blank">
-              <DropdownMenuItem>
-                <NotepadText className="mr-2 h-4 w-4" />
-                <span>Notes</span>
-              </DropdownMenuItem>
-            </Link>
-
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 {users.map((user) => {

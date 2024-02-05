@@ -21,31 +21,36 @@ export default function OrderStatusCard({ countsByTime, order }: Props) {
         .sort((a, b) => (a.date > b.date ? 1 : -1))
         .map((bidResult) => {
           return (
-            <div key={bidResult.date} className="">
-              <span className="text-xs font-semibold">
-                {format(new UTCDate(bidResult.date), "MMM d, yyyy")}
-              </span>
-              <div className="flex flex-col gap-2">
-                {bidResult.times
-                  .sort((a, b) => (a.time > b.time ? 1 : -1))
-                  .map((hour) => {
-                    return (
-                      <div key={hour.time} className="flex">
-                        <span className="text-xs">
-                          {" "}
-                          {hour.time} UTC: {hour.count}/{order.gpus_per_hour}{" "}
-                        </span>
-                        {hour.count === order.gpus_per_hour ? (
-                          <BadgeCheck color="green" className="ml-2 h-4 w-4" />
-                        ) : (
-                          <BadgeAlert
-                            color="#F1C40F"
-                            className="ml-2 h-4 w-4"
-                          />
-                        )}{" "}
-                      </div>
-                    );
-                  })}
+            <div key={bidResult.date} className="flex flex-col items-center">
+              <div>
+                <span className="text-xs font-semibold">
+                  {format(new UTCDate(bidResult.date), "MMM d, yyyy")}
+                </span>
+                <div className="flex flex-col gap-2">
+                  {bidResult.times
+                    .sort((a, b) => (a.time > b.time ? 1 : -1))
+                    .map((hour) => {
+                      return (
+                        <div key={hour.time} className="flex">
+                          <span className="text-xs">
+                            {" "}
+                            {hour.time} UTC: {hour.count}/{order.gpus_per_hour}{" "}
+                          </span>
+                          {hour.count === order.gpus_per_hour ? (
+                            <BadgeCheck
+                              color="green"
+                              className="ml-2 h-4 w-4"
+                            />
+                          ) : (
+                            <BadgeAlert
+                              color="#F1C40F"
+                              className="ml-2 h-4 w-4"
+                            />
+                          )}{" "}
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
             </div>
           );

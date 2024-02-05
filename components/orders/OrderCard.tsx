@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/client";
-import { formatAsUSD } from "@/lib/utils";
+import { formatAsUSD } from "@/utils/utils";
 import { useEffect, useMemo, useState } from "react";
 import OrderStatusCard from "@/components/orders/OrderStatusCard";
 import { toast } from "sonner";
