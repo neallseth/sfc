@@ -52,6 +52,7 @@ type BidFormProps = {
   pricePerGPU: number;
   pullUserOrders: () => Promise<void>;
   closeModal: () => void;
+  classNames?: string;
 };
 
 export function ConfirmBid({
@@ -130,6 +131,7 @@ export function ConfirmBid({
           pricePerGPU={pricePerGPU}
           pullUserOrders={pullUserOrders}
           closeModal={() => setOpen(false)}
+          classNames="px-4"
         />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -151,6 +153,7 @@ function BidForm({
   pricePerGPU,
   pullUserOrders,
   closeModal,
+  classNames,
 }: BidFormProps) {
   const [submitted, setSubmitted] = useState(false);
 
@@ -192,7 +195,10 @@ function BidForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className={cn("grid items-start gap-4")}>
+    <form
+      onSubmit={handleSubmit}
+      className={cn("grid items-start gap-4", classNames)}
+    >
       <p>
         <span className="font-bold">{gpuCount}</span> GPUs per hour, for{" "}
         <span className="font-bold">{hoursCount}</span> hours
@@ -201,15 +207,11 @@ function BidForm({
         <div>
           <p>
             Starting{" "}
-            {/* <span className="font-bold">{formatUTCDate(startDateTimeUTC)}</span> */}
             <span className="font-bold">
               {" "}
               {format(new UTCDate(startDateTimeUTC), "MMM d, yyyy, HH:mm") +
                 " UTC"}
             </span>
-            {/* <span className="font-bold">
-              {format(startDateTimeUTC, "yyyy-MM-dd'T'HH:mm:ss'Z'")}
-            </span> */}
           </p>
           <p className="text-xs italic">
             {format(startDateTimeUTC, "LLL dd, yyyy, h:mm aaaa O")}
@@ -220,9 +222,6 @@ function BidForm({
         <div>
           <p>
             Ending{" "}
-            {/* <span className="font-bold">
-              {format(endDateTimeUTC, "LLL dd, yyyy, HH:mm 'UTC'")}
-            </span> */}
             <span className="font-bold">
               {" "}
               {format(new UTCDate(endDateTimeUTC), "MMM d, yyyy, HH:mm") +
